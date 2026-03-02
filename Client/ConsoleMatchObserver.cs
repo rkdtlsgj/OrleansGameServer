@@ -4,7 +4,7 @@ public class ConsoleMatchObserver : IMatchObserver
 {
     public void System(string text)
     {
-        Console.WriteLine("text");
+        Console.WriteLine(text);
     }
 
     public void Queued(string queueKey, int waitingCount)
@@ -14,6 +14,6 @@ public class ConsoleMatchObserver : IMatchObserver
 
     public void Matched(Guid matchId, string queueKey, string opponent)
     {
-        Console.WriteLine($" matchId={matchId} / 상대={opponent}");
+        Console.WriteLine($"매칭완료! matchId={matchId} / 상대={opponent}");
     }
 }
