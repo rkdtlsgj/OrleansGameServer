@@ -9,13 +9,24 @@
       "OrleansMatchingServer/1.0.0": {
         "dependencies": {
           "Common": "1.0.0",
+          "Dapper": "2.1.72",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.3",
           "Microsoft.Orleans.Core": "10.0.1",
           "Microsoft.Orleans.Core.Abstractions": "10.0.1",
-          "Microsoft.Orleans.Server": "10.0.1"
+          "Microsoft.Orleans.Server": "10.0.1",
+          "Npgsql": "10.0.2",
+          "StackExchange.Redis": "2.12.1"
         },
         "runtime": {
           "OrleansMatchingServer.dll": {}
+        }
+      },
+      "Dapper/2.1.72": {
+        "runtime": {
+          "lib/net8.0/Dapper.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.1.72.10375"
+          }
         }
       },
       "Humanizer.Core/2.14.1": {
@@ -559,7 +570,7 @@
           "Microsoft.Extensions.Options.ConfigurationExtensions": "8.0.0",
           "Microsoft.Orleans.Core.Abstractions": "10.0.1",
           "Newtonsoft.Json": "13.0.4",
-          "System.IO.Hashing": "10.0.0",
+          "System.IO.Hashing": "10.0.2",
           "System.IO.Pipelines": "8.0.0",
           "System.Memory.Data": "8.0.1"
         },
@@ -583,7 +594,7 @@
           "Microsoft.Extensions.ObjectPool": "8.0.22",
           "Microsoft.Extensions.Options": "10.0.3",
           "Microsoft.Orleans.Serialization": "10.0.1",
-          "System.IO.Hashing": "10.0.0",
+          "System.IO.Hashing": "10.0.2",
           "System.IO.Pipelines": "8.0.0"
         },
         "runtime": {
@@ -616,7 +627,7 @@
           "Microsoft.Extensions.Options.ConfigurationExtensions": "8.0.0",
           "Microsoft.Orleans.Runtime": "10.0.1",
           "Newtonsoft.Json": "13.0.4",
-          "System.IO.Hashing": "10.0.0",
+          "System.IO.Hashing": "10.0.2",
           "System.IO.Pipelines": "8.0.0",
           "System.Memory.Data": "8.0.1"
         },
@@ -650,7 +661,7 @@
           "Microsoft.Extensions.Options.ConfigurationExtensions": "8.0.0",
           "Microsoft.Orleans.Core": "10.0.1",
           "Newtonsoft.Json": "13.0.4",
-          "System.IO.Hashing": "10.0.0",
+          "System.IO.Hashing": "10.0.2",
           "System.IO.Pipelines": "8.0.0",
           "System.Memory.Data": "8.0.1"
         },
@@ -670,7 +681,7 @@
           "Microsoft.Extensions.ObjectPool": "8.0.22",
           "Microsoft.Extensions.Options": "10.0.3",
           "Microsoft.Orleans.Serialization.Abstractions": "10.0.1",
-          "System.IO.Hashing": "10.0.0",
+          "System.IO.Hashing": "10.0.2",
           "System.IO.Pipelines": "8.0.0"
         },
         "runtime": {
@@ -715,7 +726,7 @@
           "Microsoft.Orleans.Persistence.Memory": "10.0.1",
           "Microsoft.Orleans.Runtime": "10.0.1",
           "Newtonsoft.Json": "13.0.4",
-          "System.IO.Hashing": "10.0.0",
+          "System.IO.Hashing": "10.0.2",
           "System.IO.Pipelines": "8.0.0",
           "System.Memory.Data": "8.0.1"
         }
@@ -725,6 +736,42 @@
           "lib/net6.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "13.0.0.0",
             "fileVersion": "13.0.4.30916"
+          }
+        }
+      },
+      "Npgsql/10.0.2": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.3",
+          "System.Diagnostics.DiagnosticSource": "10.0.3"
+        },
+        "runtime": {
+          "lib/net8.0/Npgsql.dll": {
+            "assemblyVersion": "10.0.2.0",
+            "fileVersion": "10.0.2.0"
+          }
+        }
+      },
+      "Pipelines.Sockets.Unofficial/2.2.8": {
+        "dependencies": {
+          "System.IO.Pipelines": "8.0.0"
+        },
+        "runtime": {
+          "lib/net5.0/Pipelines.Sockets.Unofficial.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "2.2.8.1080"
+          }
+        }
+      },
+      "StackExchange.Redis/2.12.1": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.3",
+          "Pipelines.Sockets.Unofficial": "2.2.8",
+          "System.IO.Hashing": "10.0.2"
+        },
+        "runtime": {
+          "lib/net8.0/StackExchange.Redis.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.12.1.28395"
           }
         }
       },
@@ -818,11 +865,11 @@
           }
         }
       },
-      "System.IO.Hashing/10.0.0": {
+      "System.IO.Hashing/10.0.2": {
         "runtime": {
           "lib/net8.0/System.IO.Hashing.dll": {
-            "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.25.52411"
+            "assemblyVersion": "10.0.0.2",
+            "fileVersion": "10.0.225.61305"
           }
         }
       },
@@ -860,6 +907,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Dapper/2.1.72": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ns4mGqQd9a/MhP8m6w556vVlZIa0/MfUu03zrxjZC/jlr1uVCsUac8bkdB+Fs98Llbd56rRSo1eZH5VVmeGZyw==",
+      "path": "dapper/2.1.72",
+      "hashPath": "dapper.2.1.72.nupkg.sha512"
     },
     "Humanizer.Core/2.14.1": {
       "type": "package",
@@ -1162,6 +1216,27 @@
       "path": "newtonsoft.json/13.0.4",
       "hashPath": "newtonsoft.json.13.0.4.nupkg.sha512"
     },
+    "Npgsql/10.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-q5RfBI+wywJSFUNDE1L4ZbHEHCFTblo8Uf6A6oe4feOUFYiUQXyAf9GBh5qEZpvJaHiEbpBPkQumjEhXCJxdrg==",
+      "path": "npgsql/10.0.2",
+      "hashPath": "npgsql.10.0.2.nupkg.sha512"
+    },
+    "Pipelines.Sockets.Unofficial/2.2.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zG2FApP5zxSx6OcdJQLbZDk2AVlN2BNQD6MorwIfV6gVj0RRxWPEp2LXAxqDGZqeNV1Zp0BNPcNaey/GXmTdvQ==",
+      "path": "pipelines.sockets.unofficial/2.2.8",
+      "hashPath": "pipelines.sockets.unofficial.2.2.8.nupkg.sha512"
+    },
+    "StackExchange.Redis/2.12.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IHxJWFM3b4g2Jrp0y7W8r27ODW6v+9oW5voJA4UNNxy0Dshn/lKqAL08kbfDKlRgB3gZFGmUX/u/mHq+mVfvwQ==",
+      "path": "stackexchange.redis/2.12.1",
+      "hashPath": "stackexchange.redis.2.12.1.nupkg.sha512"
+    },
     "System.Composition/6.0.0": {
       "type": "package",
       "serviceable": true,
@@ -1218,12 +1293,12 @@
       "path": "system.diagnostics.eventlog/8.0.1",
       "hashPath": "system.diagnostics.eventlog.8.0.1.nupkg.sha512"
     },
-    "System.IO.Hashing/10.0.0": {
+    "System.IO.Hashing/10.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-MqSp5IfX9RdWVwTED0WSRL1kZDNB7GlFj64O/NAJs4uO1beBHWEAFLlC7j8Fw/PkI+SUzooLVNvAe4aEkSwsRg==",
-      "path": "system.io.hashing/10.0.0",
-      "hashPath": "system.io.hashing.10.0.0.nupkg.sha512"
+      "sha512": "sha512-AKJknIFi9O3+rGExxTry188JPvUoZAPcCtS2qdqyFhIzsxQ1Ap94BeGDG0VzVEHakhmRxmJtVih6TsHoghIt/g==",
+      "path": "system.io.hashing/10.0.2",
+      "hashPath": "system.io.hashing.10.0.2.nupkg.sha512"
     },
     "System.IO.Pipelines/8.0.0": {
       "type": "package",

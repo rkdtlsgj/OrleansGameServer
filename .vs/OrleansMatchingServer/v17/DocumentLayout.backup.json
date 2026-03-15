@@ -7,16 +7,28 @@
       "RelativeMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|solutionrelative:orleansmatchingserver\\matchingqueuegrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\common\\iqueuegrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|solutionrelative:common\\iqueuegrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\orleansmatchingserver\\matchhistoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|solutionrelative:orleansmatchingserver\\matchhistoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\common\\imatchgrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|solutionrelative:common\\imatchgrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\orleansmatchingserver\\matchinggrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|solutionrelative:orleansmatchingserver\\matchinggrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\common\\mathchmsg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|solutionrelative:common\\mathchmsg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\orleansmatchingserver\\matchinggrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|solutionrelative:orleansmatchingserver\\matchinggrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\orleansmatchingserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|solutionrelative:orleansmatchingserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\orleansmatchingserver\\queuecacherepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|solutionrelative:orleansmatchingserver\\queuecacherepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6A1A9940-D4D4-4BC0-8A4E-A4EA1087E485}|Client\\Client.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\client\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -27,20 +39,16 @@
       "RelativeMoniker": "D:0:0:{6A1A9940-D4D4-4BC0-8A4E-A4EA1087E485}|Client\\Client.csproj|solutionrelative:client\\consolematchobserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\common\\imatchgrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|solutionrelative:common\\imatchgrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\orleansmatchingserver\\orleansmatchingserver.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|solutionrelative:orleansmatchingserver\\orleansmatchingserver.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\orleansmatchingserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|solutionrelative:orleansmatchingserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\common\\iqueuegrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|solutionrelative:common\\iqueuegrain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\common\\iobserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DF6BB5D5-3D72-44CC-874B-6709A3B366FD}|Common\\Common.csproj|solutionrelative:common\\iobserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|c:\\users\\rkdtl\\source\\repos\\orleansmatchingserver\\orleansmatchingserver\\orleansmatchingserver.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{FE66A5F8-DF83-47E4-9756-000B493970A3}|OrleansMatchingServer\\OrleansMatchingServer.csproj|solutionrelative:orleansmatchingserver\\orleansmatchingserver.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,80 +62,41 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Client\\Program.cs",
-              "RelativeDocumentMoniker": "Client\\Program.cs",
-              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Client\\Program.cs",
-              "RelativeToolTip": "Client\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "QueueCacheRepository.cs",
+              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\QueueCacheRepository.cs",
+              "RelativeDocumentMoniker": "OrleansMatchingServer\\QueueCacheRepository.cs",
+              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\QueueCacheRepository.cs",
+              "RelativeToolTip": "OrleansMatchingServer\\QueueCacheRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-01T12:38:42.987Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ConsoleMatchObserver.cs",
-              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Client\\ConsoleMatchObserver.cs",
-              "RelativeDocumentMoniker": "Client\\ConsoleMatchObserver.cs",
-              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Client\\ConsoleMatchObserver.cs",
-              "RelativeToolTip": "Client\\ConsoleMatchObserver.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA3AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-01T12:37:18.816Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "OrleansMatchingServer",
-              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\OrleansMatchingServer.csproj",
-              "RelativeDocumentMoniker": "OrleansMatchingServer\\OrleansMatchingServer.csproj",
-              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\OrleansMatchingServer.csproj",
-              "RelativeToolTip": "OrleansMatchingServer\\OrleansMatchingServer.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-03-01T08:42:56.012Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\Program.cs",
-              "RelativeDocumentMoniker": "OrleansMatchingServer\\Program.cs",
-              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\Program.cs",
-              "RelativeToolTip": "OrleansMatchingServer\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-01T08:50:45.727Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MathchMsg.cs",
-              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\MathchMsg.cs",
-              "RelativeDocumentMoniker": "Common\\MathchMsg.cs",
-              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\MathchMsg.cs",
-              "RelativeToolTip": "Common\\MathchMsg.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-01T06:43:06.668Z",
+              "WhenOpened": "2026-03-15T08:08:25.389Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "IQueueGrain.cs",
-              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IQueueGrain.cs",
-              "RelativeDocumentMoniker": "Common\\IQueueGrain.cs",
-              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IQueueGrain.cs",
-              "RelativeToolTip": "Common\\IQueueGrain.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Title": "MatchHistoryRepository.cs",
+              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\MatchHistoryRepository.cs",
+              "RelativeDocumentMoniker": "OrleansMatchingServer\\MatchHistoryRepository.cs",
+              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\MatchHistoryRepository.cs",
+              "RelativeToolTip": "OrleansMatchingServer\\MatchHistoryRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-01T06:32:28.296Z",
+              "WhenOpened": "2026-03-15T07:56:09.899Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MathchMsg.cs",
+              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\MathchMsg.cs",
+              "RelativeDocumentMoniker": "Common\\MathchMsg.cs",
+              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\MathchMsg.cs",
+              "RelativeToolTip": "Common\\MathchMsg.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-01T06:43:06.668Z",
               "EditorCaption": ""
             },
             {
@@ -138,9 +107,46 @@
               "RelativeDocumentMoniker": "OrleansMatchingServer\\MatchingGrain.cs",
               "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\MatchingGrain.cs",
               "RelativeToolTip": "OrleansMatchingServer\\MatchingGrain.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAWwAsAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-01T08:43:07.846Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "IQueueGrain.cs",
+              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IQueueGrain.cs",
+              "RelativeDocumentMoniker": "Common\\IQueueGrain.cs",
+              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IQueueGrain.cs",
+              "RelativeToolTip": "Common\\IQueueGrain.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-01T06:32:28.296Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "IObserver.cs",
+              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IObserver.cs",
+              "RelativeDocumentMoniker": "Common\\IObserver.cs",
+              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IObserver.cs",
+              "RelativeToolTip": "Common\\IObserver.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAgAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-01T06:33:49.656Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IMatchGrain.cs",
+              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IMatchGrain.cs",
+              "RelativeDocumentMoniker": "Common\\IMatchGrain.cs",
+              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IMatchGrain.cs",
+              "RelativeToolTip": "Common\\IMatchGrain.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-01T06:42:07.503Z",
               "EditorCaption": ""
             },
             {
@@ -151,36 +157,59 @@
               "RelativeDocumentMoniker": "OrleansMatchingServer\\MatchingQueueGrain.cs",
               "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\MatchingQueueGrain.cs",
               "RelativeToolTip": "OrleansMatchingServer\\MatchingQueueGrain.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4AAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-01T06:17:59.273Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "IObserver.cs",
-              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IObserver.cs",
-              "RelativeDocumentMoniker": "Common\\IObserver.cs",
-              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IObserver.cs",
-              "RelativeToolTip": "Common\\IObserver.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAgAAAA+AAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\Program.cs",
+              "RelativeDocumentMoniker": "OrleansMatchingServer\\Program.cs",
+              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\Program.cs",
+              "RelativeToolTip": "OrleansMatchingServer\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-01T06:33:49.656Z",
+              "WhenOpened": "2026-03-01T08:50:45.727Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "IMatchGrain.cs",
-              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IMatchGrain.cs",
-              "RelativeDocumentMoniker": "Common\\IMatchGrain.cs",
-              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Common\\IMatchGrain.cs",
-              "RelativeToolTip": "Common\\IMatchGrain.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAQAAAANAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "ConsoleMatchObserver.cs",
+              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Client\\ConsoleMatchObserver.cs",
+              "RelativeDocumentMoniker": "Client\\ConsoleMatchObserver.cs",
+              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Client\\ConsoleMatchObserver.cs",
+              "RelativeToolTip": "Client\\ConsoleMatchObserver.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwA4AAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-01T06:42:07.503Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-01T12:37:18.816Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Client\\Program.cs",
+              "RelativeDocumentMoniker": "Client\\Program.cs",
+              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\Client\\Program.cs",
+              "RelativeToolTip": "Client\\Program.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAnwBsAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-01T12:38:42.987Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "OrleansMatchingServer.csproj",
+              "DocumentMoniker": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\OrleansMatchingServer.csproj",
+              "RelativeDocumentMoniker": "OrleansMatchingServer\\OrleansMatchingServer.csproj",
+              "ToolTip": "C:\\Users\\rkdtl\\source\\repos\\OrleansMatchingServer\\OrleansMatchingServer\\OrleansMatchingServer.csproj",
+              "RelativeToolTip": "OrleansMatchingServer\\OrleansMatchingServer.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-01T08:42:56.012Z"
             }
           ]
         }

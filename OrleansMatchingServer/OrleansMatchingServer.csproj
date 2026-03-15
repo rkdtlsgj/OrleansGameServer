@@ -12,6 +12,12 @@
     <PackageReference Include="Microsoft.Orleans.Core" Version="10.0.1" />
     <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="10.0.1" />
     <PackageReference Include="Microsoft.Orleans.Server" Version="10.0.1" />
+    <PackageReference Include="Npgsql" Version="10.*" />
+    <PackageReference Include="Dapper" Version="2.*" />
+    <PackageReference Include="StackExchange.Redis" Version="2.*" />
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

@@ -96,3 +96,9 @@ C:\Users\rkdtl\source\repos\OrleansMatchingServer\OrleansMatchingServer\obj\Debu
 C:\Users\rkdtl\source\repos\OrleansMatchingServer\OrleansMatchingServer\obj\Debug\net8.0\OrleansMatchingServer.pdb
 C:\Users\rkdtl\source\repos\OrleansMatchingServer\OrleansMatchingServer\obj\Debug\net8.0\OrleansMatchingServer.genruntimeconfig.cache
 C:\Users\rkdtl\source\repos\OrleansMatchingServer\OrleansMatchingServer\obj\Debug\net8.0\ref\OrleansMatchingServer.dll
+C:\Users\rkdtl\source\repos\OrleansMatchingServer\OrleansMatchingServer\obj\Debug\net8.0\OrleansMatchingServer.sourcelink.json
+C:\Users\rkdtl\source\repos\OrleansMatchingServer\OrleansMatchingServer\bin\Debug\net8.0\appsettings.json
+C:\Users\rkdtl\source\repos\OrleansMatchingServer\OrleansMatchingServer\bin\Debug\net8.0\Dapper.dll
+C:\Users\rkdtl\source\repos\OrleansMatchingServer\OrleansMatchingServer\bin\Debug\net8.0\Npgsql.dll
+C:\Users\rkdtl\source\repos\OrleansMatchingServer\OrleansMatchingServer\bin\Debug\net8.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\rkdtl\source\repos\OrleansMatchingServer\OrleansMatchingServer\bin\Debug\net8.0\StackExchange.Redis.dll

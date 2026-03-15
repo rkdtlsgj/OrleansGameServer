@@ -3,6 +3,9 @@ using Orleans;
 
 public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
 {
+    private readonly MatchHistoryRepository _historyRepository;
+    private readonly QueueCacheRepository _queueCacheRepository;
+
     private Dictionary<string, IMatchObserver> _waiting = new Dictionary<string, IMatchObserver>();
     private Queue<string> _order = new Queue<string>();
 
@@ -12,6 +15,12 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
     //테스트용 매칭 대기시간
     private static readonly TimeSpan MatchInterval = TimeSpan.FromMinutes(1);
 
+
+    public MatchingQueueGrain(MatchHistoryRepository historyRepository, QueueCacheRepository queueCacheRepository)
+    {
+        _historyRepository = historyRepository;
+        _queueCacheRepository = queueCacheRepository;
+    }
 
     //Unity의 Awake같은 개념
     public override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -38,8 +47,10 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
         return Task.CompletedTask;
     }
 
-    public Task Enqueue(string nickname, IMatchObserver observer)
+    public async Task Enqueue(string nickname, IMatchObserver observer)
     {
+        var key = this.GetPrimaryKeyString();
+
         //중복방지
         if (_waiting.ContainsKey(nickname))
         {
@@ -47,27 +58,33 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
             _waiting[nickname] = observer;
             Queued(observer);
 
-            return Task.CompletedTask;
+            return;
         }
 
         _waiting[nickname] = observer;
         _order.Enqueue(nickname);
 
+        await _queueCacheRepository.AddToQueueAsync(key, nickname);
+
         BroadcastSystem("대기열 참가!");
         BroadcastQueued();
 
-        return Task.CompletedTask;
+        return;
     }
 
-    public Task Cancel(string nickname)
+    public async Task Cancel(string nickname)
     {
+        var key = this.GetPrimaryKeyString();
+
         if (_waiting.Remove(nickname))
         {
+            await _queueCacheRepository.RemoveFromQueueAsync(key, nickname);
+
             BroadcastSystem("취소!");
             BroadcastQueued();
         }
 
-        return Task.CompletedTask;
+        return;
     }
 
 
@@ -107,7 +124,7 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
     }
 
 
-    private Task RunMatching()
+    private async Task RunMatching()
     {
         var key = this.GetPrimaryKeyString();
 
@@ -123,8 +140,18 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
             _waiting.Remove(p1);
             _waiting.Remove(p2);
 
+            await _queueCacheRepository.RemoveFromQueueAsync(key, p1);
+            await _queueCacheRepository.RemoveFromQueueAsync(key, p2);
+
             var matchId = Guid.NewGuid(); //아이디 생성
-            var match = GrainFactory.GetGrain<IMatchGrain>(matchId);            
+            var match = GrainFactory.GetGrain<IMatchGrain>(matchId);
+            var createdAt = DateTimeOffset.UtcNow;
+
+            await match.Initialize(key, p1, p2);
+
+
+            //매칭 기록
+            await _historyRepository.SaveMatchAsync(matchId, key, p1, p2, createdAt);
 
             NotiMatchComplete(obs1, matchId, key, p2);
             NotiMatchComplete(obs2, matchId, key, p1);            
@@ -132,7 +159,7 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
 
         BroadcastQueued();
 
-        return Task.CompletedTask;
+        return;
     }
 
     private void Queued(IMatchObserver obs)

@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     "net8.0": {
+      "Dapper/2.1.72": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -1097,6 +1110,57 @@
           }
         }
       },
+      "Npgsql/10.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "System.Diagnostics.DiagnosticSource": "9.0.11"
+        },
+        "compile": {
+          "lib/net8.0/Npgsql.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Npgsql.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Pipelines.Sockets.Unofficial/2.2.8": {
+        "type": "package",
+        "dependencies": {
+          "System.IO.Pipelines": "5.0.1"
+        },
+        "compile": {
+          "lib/net5.0/Pipelines.Sockets.Unofficial.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/Pipelines.Sockets.Unofficial.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "StackExchange.Redis/2.12.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "Pipelines.Sockets.Unofficial": "2.2.8",
+          "System.IO.Hashing": "10.0.2"
+        },
+        "compile": {
+          "lib/net8.0/StackExchange.Redis.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/StackExchange.Redis.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.Composition/6.0.0": {
         "type": "package",
         "dependencies": {
@@ -1243,7 +1307,7 @@
           }
         }
       },
-      "System.IO.Hashing/10.0.0": {
+      "System.IO.Hashing/10.0.2": {
         "type": "package",
         "compile": {
           "lib/net8.0/System.IO.Hashing.dll": {
@@ -1307,6 +1371,27 @@
     }
   },
   "libraries": {
+    "Dapper/2.1.72": {
+      "sha512": "ns4mGqQd9a/MhP8m6w556vVlZIa0/MfUu03zrxjZC/jlr1uVCsUac8bkdB+Fs98Llbd56rRSo1eZH5VVmeGZyw==",
+      "type": "package",
+      "path": "dapper/2.1.72",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Dapper.png",
+        "dapper.2.1.72.nupkg.sha512",
+        "dapper.nuspec",
+        "lib/net10.0/Dapper.dll",
+        "lib/net10.0/Dapper.xml",
+        "lib/net461/Dapper.dll",
+        "lib/net461/Dapper.xml",
+        "lib/net8.0/Dapper.dll",
+        "lib/net8.0/Dapper.xml",
+        "lib/netstandard2.0/Dapper.dll",
+        "lib/netstandard2.0/Dapper.xml",
+        "readme.md"
+      ]
+    },
     "Humanizer.Core/2.14.1": {
       "sha512": "lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "type": "package",
@@ -3310,6 +3395,72 @@
         "packageIcon.png"
       ]
     },
+    "Npgsql/10.0.2": {
+      "sha512": "q5RfBI+wywJSFUNDE1L4ZbHEHCFTblo8Uf6A6oe4feOUFYiUQXyAf9GBh5qEZpvJaHiEbpBPkQumjEhXCJxdrg==",
+      "type": "package",
+      "path": "npgsql/10.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net10.0/Npgsql.dll",
+        "lib/net10.0/Npgsql.xml",
+        "lib/net8.0/Npgsql.dll",
+        "lib/net8.0/Npgsql.xml",
+        "lib/net9.0/Npgsql.dll",
+        "lib/net9.0/Npgsql.xml",
+        "npgsql.10.0.2.nupkg.sha512",
+        "npgsql.nuspec",
+        "postgresql.png"
+      ]
+    },
+    "Pipelines.Sockets.Unofficial/2.2.8": {
+      "sha512": "zG2FApP5zxSx6OcdJQLbZDk2AVlN2BNQD6MorwIfV6gVj0RRxWPEp2LXAxqDGZqeNV1Zp0BNPcNaey/GXmTdvQ==",
+      "type": "package",
+      "path": "pipelines.sockets.unofficial/2.2.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/Pipelines.Sockets.Unofficial.dll",
+        "lib/net461/Pipelines.Sockets.Unofficial.xml",
+        "lib/net472/Pipelines.Sockets.Unofficial.dll",
+        "lib/net472/Pipelines.Sockets.Unofficial.xml",
+        "lib/net5.0/Pipelines.Sockets.Unofficial.dll",
+        "lib/net5.0/Pipelines.Sockets.Unofficial.xml",
+        "lib/netcoreapp3.1/Pipelines.Sockets.Unofficial.dll",
+        "lib/netcoreapp3.1/Pipelines.Sockets.Unofficial.xml",
+        "lib/netstandard2.0/Pipelines.Sockets.Unofficial.dll",
+        "lib/netstandard2.0/Pipelines.Sockets.Unofficial.xml",
+        "lib/netstandard2.1/Pipelines.Sockets.Unofficial.dll",
+        "lib/netstandard2.1/Pipelines.Sockets.Unofficial.xml",
+        "pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
+        "pipelines.sockets.unofficial.nuspec"
+      ]
+    },
+    "StackExchange.Redis/2.12.1": {
+      "sha512": "IHxJWFM3b4g2Jrp0y7W8r27ODW6v+9oW5voJA4UNNxy0Dshn/lKqAL08kbfDKlRgB3gZFGmUX/u/mHq+mVfvwQ==",
+      "type": "package",
+      "path": "stackexchange.redis/2.12.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net10.0/StackExchange.Redis.dll",
+        "lib/net10.0/StackExchange.Redis.xml",
+        "lib/net461/StackExchange.Redis.dll",
+        "lib/net461/StackExchange.Redis.xml",
+        "lib/net472/StackExchange.Redis.dll",
+        "lib/net472/StackExchange.Redis.xml",
+        "lib/net6.0/StackExchange.Redis.dll",
+        "lib/net6.0/StackExchange.Redis.xml",
+        "lib/net8.0/StackExchange.Redis.dll",
+        "lib/net8.0/StackExchange.Redis.xml",
+        "lib/netstandard2.0/StackExchange.Redis.dll",
+        "lib/netstandard2.0/StackExchange.Redis.xml",
+        "stackexchange.redis.2.12.1.nupkg.sha512",
+        "stackexchange.redis.nuspec"
+      ]
+    },
     "System.Composition/6.0.0": {
       "sha512": "d7wMuKQtfsxUa7S13tITC8n1cQzewuhD5iDjZtK2prwFfKVzdYtgrTHgjaV03Zq7feGQ5gkP85tJJntXwInsJA==",
       "type": "package",
@@ -3509,10 +3660,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.IO.Hashing/10.0.0": {
-      "sha512": "MqSp5IfX9RdWVwTED0WSRL1kZDNB7GlFj64O/NAJs4uO1beBHWEAFLlC7j8Fw/PkI+SUzooLVNvAe4aEkSwsRg==",
+    "System.IO.Hashing/10.0.2": {
+      "sha512": "AKJknIFi9O3+rGExxTry188JPvUoZAPcCtS2qdqyFhIzsxQ1Ap94BeGDG0VzVEHakhmRxmJtVih6TsHoghIt/g==",
       "type": "package",
-      "path": "system.io.hashing/10.0.0",
+      "path": "system.io.hashing/10.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3533,7 +3684,7 @@
         "lib/net9.0/System.IO.Hashing.xml",
         "lib/netstandard2.0/System.IO.Hashing.dll",
         "lib/netstandard2.0/System.IO.Hashing.xml",
-        "system.io.hashing.10.0.0.nupkg.sha512",
+        "system.io.hashing.10.0.2.nupkg.sha512",
         "system.io.hashing.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -3606,10 +3757,13 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "Common >= 1.0.0",
+      "Dapper >= 2.*",
       "Microsoft.Extensions.Hosting.Abstractions >= 10.0.3",
       "Microsoft.Orleans.Core >= 10.0.1",
       "Microsoft.Orleans.Core.Abstractions >= 10.0.1",
-      "Microsoft.Orleans.Server >= 10.0.1"
+      "Microsoft.Orleans.Server >= 10.0.1",
+      "Npgsql >= 10.*",
+      "StackExchange.Redis >= 2.*"
     ]
   },
   "packageFolders": {
@@ -3666,6 +3820,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "Dapper": {
+            "target": "Package",
+            "version": "[2.*, )"
+          },
           "Microsoft.Extensions.Hosting.Abstractions": {
             "target": "Package",
             "version": "[10.0.3, )"
@@ -3681,6 +3839,14 @@
           "Microsoft.Orleans.Server": {
             "target": "Package",
             "version": "[10.0.1, )"
+          },
+          "Npgsql": {
+            "target": "Package",
+            "version": "[10.*, )"
+          },
+          "StackExchange.Redis": {
+            "target": "Package",
+            "version": "[2.*, )"
           }
         },
         "imports": [
