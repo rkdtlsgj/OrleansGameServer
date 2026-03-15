@@ -11,11 +11,14 @@ Microsoft Orleans기반의 매칭 대기열 프로그램이다.<br>
 * .NET 8.0
 * Microsoft Orleans (Silo/Client)
 * Localhost clustering(개발용)
-
+* PostgreSQL
+* Redis
 
 # 개발 목적
 매치메이킹 처럼 동시 참가로 경쟁 조건이 생기기 쉬운문제를 Grain모델로 단순화하여 방지<br>
-채널명을 키로 체크하여 순차적으로 Grain 요청을 처리하여 순차적으로 처리하여 락없이 수행하기위함
+채널명을 키로 체크하여 순차적으로 Grain 요청을 처리하여 순차적으로 처리하여 락없이 수행하기위함<br>
+Redis와 SQL을 연동하여 실시간 상태관리와 데이터를 저장하는 형태로 설계<br>
+
 <details>
   <summary>코드 보기</summary>
   타이머를 이용해 주기적으로 RunMatch를 실행하도록 추가<br>
@@ -41,3 +44,6 @@ Microsoft Orleans기반의 매칭 대기열 프로그램이다.<br>
 
 
 3차<br>
+
+SQL에 매칭완료 이력 저장<br>
+Redis에 채널별로 대기 유저 확인<br>
