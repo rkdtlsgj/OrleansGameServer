@@ -44,6 +44,7 @@ Redis와 SQL을 연동하여 실시간 상태관리와 데이터를 저장하는
 
 
 3차<br>
-
+<img width="588" height="298" alt="Image" src="https://github.com/user-attachments/assets/3a887b01-31d8-45a4-b5a9-92e5491752bf" /><br>
+<img width="715" height="151" alt="Image" src="https://github.com/user-attachments/assets/294db437-db34-410c-80c2-7be9eed879ab" /><br>
 SQL에 매칭완료 이력 저장<br>
 Redis에 채널별로 대기 유저 확인<br>
