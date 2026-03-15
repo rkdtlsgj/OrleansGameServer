@@ -5,6 +5,7 @@ Microsoft Orleans기반의 매칭 대기열 프로그램이다.<br>
 
 개발 1단계 같은 큐에 2명이 모이면 서버가 실시간으로 매칭을 진행하게 된다.<br>
 개발 2단계 스케줄러를 이용해서 몇분마다 매칭을 돌리는 시스템을 추가한다.
+개발 3단계 매칭기록을 Redis와 SQL에 기록한다
 
 # 환경
 * .NET 8.0
@@ -36,9 +37,7 @@ Microsoft Orleans기반의 매칭 대기열 프로그램이다.<br>
 2차<br>
 <img width="654" height="231" alt="image" src="https://github.com/user-attachments/assets/4e34b00c-5285-4b0e-8626-8b2943222524" /><br>
 <img width="273" height="158" alt="image" src="https://github.com/user-attachments/assets/764da523-4f1b-4c05-ae15-fc0b75f1b49c" /><br>
-타이머에 의해서 2명씩 매칭이되고 남은 한사람은 계속 기다리는 형태로 변경
+타이머에 의해서 2명씩 매칭이되고 남은 한사람은 계속 기다리는 형태로 변경<br>
 
 
-
-
-
+3차<br>
