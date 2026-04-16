@@ -7,6 +7,9 @@ Microsoft Orleans기반의 매칭 대기열 프로그램이다.<br>
 개발 2단계 스케줄러를 이용해서 몇분마다 매칭을 돌리는 시스템을 추가한다.<br>
 개발 3단계 매칭기록을 Redis와 SQL에 기록한다
 
+# Orleans 학습정리
+https://blog.naver.com/rkdtlsgj/224198414818
+
 # 환경
 * .NET 8.0
 * Microsoft Orleans (Silo/Client)
