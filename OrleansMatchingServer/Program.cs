@@ -6,7 +6,9 @@ using StackExchange.Redis;
 
 
 await Host.CreateDefaultBuilder(args)
-    .UseOrleans(silo => silo.UseLocalhostClustering())
+    .UseOrleans(silo => silo.UseLocalhostClustering()
+    .AddMemoryGrainStorage("matchStore"))
+
     .ConfigureServices((context, services) =>
     {
         var postgres = context.Configuration.GetConnectionString("Postgres");

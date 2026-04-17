@@ -20,14 +20,14 @@ var nickname = Console.ReadLine()?.Trim();
 if (string.IsNullOrWhiteSpace(nickname))
     return;
 
-Console.Write("채널명");
+Console.Write("채널명: ");
 var queueKey = Console.ReadLine()?.Trim();
 if (string.IsNullOrWhiteSpace(queueKey))
     return;
 
 var queue = client.GetGrain<IMatchmakingQueueGrain>(queueKey);
 
-// Observer 등록 (수신용)
+// Observer 등록 클라이언트 알람용도
 var observer = new ConsoleMatchObserver();
 var observerRef = client.CreateObjectReference<IMatchObserver>(observer);
 
