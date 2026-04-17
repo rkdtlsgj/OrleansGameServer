@@ -28,8 +28,13 @@ Redis와 SQL을 연동하여 실시간 상태관리와 데이터를 저장하는
   <summary>코드 보기</summary>
   타이머를 이용해 주기적으로 RunMatch를 실행하도록 추가<br>
   <img width="489" height="450" alt="image" src="https://github.com/user-attachments/assets/8b08150b-8969-470d-92f3-c485b9c9fcd1" /><br>
-  <img width="451" height="323" alt="image" src="https://github.com/user-attachments/assets/a9a42733-da86-486d-bda4-ea95378e280a" />
+  <img width="451" height="323" alt="image" src="https://github.com/user-attachments/assets/a9a42733-da86-486d-bda4-ea95378e280a" /><br>
+  매칭시스템을 Grain을 이용해서 관리 동시성문제를 해결한다<br>
+  <img width="888" height="506" alt="image" src="https://github.com/user-attachments/assets/b9abe0b1-8f08-4389-bf1f-9f600c228653" />
+
+
 </details>
+
 
 
 
