@@ -69,7 +69,8 @@ Redis에 채널별로 대기 유저 확인<br>
 </details>
 
 
-4단계<br><details>
+4단계<br>
+<details>
 <summary>결과 보기</summary>
 <img width="240" height="60" alt="image" src="https://github.com/user-attachments/assets/8afb4bb7-8172-4056-a7d1-84737c2ae55f" /><br>
 <img width="505" height="72" alt="image" src="https://github.com/user-attachments/assets/f2f550e9-5668-4774-854a-53b5fab99266" /><br>
