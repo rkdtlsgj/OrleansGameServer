@@ -1,17 +1,26 @@
-# Orleans MatchServer
+# Orleans Game Server
 
-Microsoft Orleans기반의 매칭 대기열 프로그램이다.<br>
-유저는 닉네임을 입력하고 채널을 입력해서 매칭 대기열에 참가하게된다.
+Microsoft Orleans기반의 프로그램이다.<br>
+유저는 아이디와 비밀번호로 회원가입을 할 수 있고<br>
+뽑기 Orleans Game Server
+
+Microsoft Orleans기반의 프로그램이다.<br>
+유저는 아이디와 비밀번호로 회원가입을 할 수 있고<br>
+뽑기 혹은 dice 매칭서버에 참여할 수 있다.<br>
 
 개발 1단계 같은 큐에 2명이 모이면 서버가 실시간으로 매칭을 진행하게 된다.<br>
 개발 2단계 스케줄러를 이용해서 몇분마다 매칭을 돌리는 시스템을 추가한다.<br>
 개발 3단계 매칭기록을 Redis와 SQL에 기록한다<br>
-개발 4단계 유저시스템 구현(작업중)<br>
-개발 5단계 가챠시스템을 구현(작업중)
-
+개발 4단계 유저시스템 구현<br>
+개발 5단계 가챠시스템을 구현
 
 # Orleans 학습정리
 https://blog.naver.com/rkdtlsgj/224198414818
+
+# 서버 구조
+
+<img width="1707" height="986" alt="image" src="https://github.com/user-attachments/assets/9c6abaaa-22a2-4a5e-abc0-b677c5157207" />
+
 
 # 환경
 * .NET 8.0
@@ -31,9 +40,16 @@ Redis와 SQL을 연동하여 실시간 상태관리와 데이터를 저장하는
   <img width="489" height="450" alt="image" src="https://github.com/user-attachments/assets/8b08150b-8969-470d-92f3-c485b9c9fcd1" /><br>
   <img width="451" height="323" alt="image" src="https://github.com/user-attachments/assets/a9a42733-da86-486d-bda4-ea95378e280a" /><br>
   매칭시스템을 Grain을 이용해서 관리 동시성문제를 해결한다<br>
-  <img width="888" height="506" alt="image" src="https://github.com/user-attachments/assets/b9abe0b1-8f08-4389-bf1f-9f600c228653" />
+  <img width="888" height="506" alt="image" src="https://github.com/user-attachments/assets/b9abe0b1-8f08-4389-bf1f-9f600c228653" /><br>
+
+  가챠시스템<br>
+  지갑과 가챠시스템은 User의 ID로 Key를 잡았다. 추후 UID로 수정작업<br>
+  var gachaGrain = clusterClient.GetGrain<IGachaGrain>(userId);<br>
+  var walletGrain = clusterClient.GetGrain<IWalletGrain>(userId);<br>
+  <img width="1096" height="128" alt="image" src="https://github.com/user-attachments/assets/b564106f-f8c4-44d2-8b6b-742f5818f94f" /><br>
 
 
+  
 </details>
 
 
@@ -76,4 +92,13 @@ Redis에 채널별로 대기 유저 확인<br>
 <img width="505" height="72" alt="image" src="https://github.com/user-attachments/assets/f2f550e9-5668-4774-854a-53b5fab99266" /><br>
 Redis에 SessionId 저장완료<br>
 </details>
+
+5단계<br>
+<details>
+<summary>결과 보기</summary>
+<img width="256" height="431" alt="image" src="https://github.com/user-attachments/assets/88e55fd8-cb69-4b68-8aba-83f9b7263ebc" /><br>
+가챠시스템 구현
+</details>
+
+
 
