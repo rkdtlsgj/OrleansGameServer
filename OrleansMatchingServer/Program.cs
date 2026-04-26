@@ -7,7 +7,10 @@ using StackExchange.Redis;
 
 await Host.CreateDefaultBuilder(args)
     .UseOrleans(silo => silo.UseLocalhostClustering()
-    .AddMemoryGrainStorage("matchStore"))
+    .AddMemoryGrainStorage("matchStore")
+    .AddMemoryGrainStorage("playerStore")
+    .AddMemoryGrainStorage("gachaStore")
+    .AddMemoryGrainStorage("walletStore"))
 
     .ConfigureServices((context, services) =>
     {
