@@ -2,10 +2,6 @@
 
 Microsoft Orleans기반의 프로그램이다.<br>
 유저는 아이디와 비밀번호로 회원가입을 할 수 있고<br>
-뽑기 Orleans Game Server
-
-Microsoft Orleans기반의 프로그램이다.<br>
-유저는 아이디와 비밀번호로 회원가입을 할 수 있고<br>
 뽑기 혹은 dice 매칭서버에 참여할 수 있다.<br>
 
 개발 1단계 같은 큐에 2명이 모이면 서버가 실시간으로 매칭을 진행하게 된다.<br>
