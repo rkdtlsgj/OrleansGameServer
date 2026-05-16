@@ -1,17 +1,12 @@
-﻿using Common;
-using Orleans.Serialization.Buffers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Common;
+using Microsoft.Extensions.Logging;
 
 namespace OrleansMatchingServer
 {
     public class GachaGrain : Grain, IGachaGrain
     {
         private readonly IPersistentState<GachaState> _state;
-
+        private readonly ILogger<GachaGrain> _logger;
 
         private static readonly List<string> SSR = ["에르핀(왕도)", "네르(빡침)", "코미(수영복)"]; // 테스트용 원래라면 DB든 json이든 따로 작업해야함
         private static readonly List<string> SR = ["에르핀", "네르", "코미"];
@@ -21,20 +16,32 @@ namespace OrleansMatchingServer
         private const double RSRate = 0.18;
         private const int Cost = 160;
 
-        public GachaGrain([PersistentState("gacha", "gachaStore")]IPersistentState<GachaState> state)
+        public GachaGrain(
+            [PersistentState("gacha", "gachaStore")] IPersistentState<GachaState> state,
+            ILogger<GachaGrain> logger)
         {
             _state = state;
+            _logger = logger;
         }
 
         public async Task<GachaResult> DrawAsync(int count)
         {
-            var walletGrain = GrainFactory.GetGrain<IWalletGrain>(this.GetPrimaryKeyString());
+            var userId = this.GetPrimaryKeyString();
+            var walletGrain = GrainFactory.GetGrain<IWalletGrain>(userId);
 
             var totalCost = Cost * count;
             var success = await walletGrain.SpendGemAsync(totalCost);
 
             if (success == false)
+            {
+                _logger.LogWarning(
+                    "Gacha failed UserId={UserId}, Count={Count}, Cost={Cost}",
+                    userId,
+                    count,
+                    totalCost);
+
                 throw new InvalidOperationException("재화 부족!");
+            }
 
             var result = new List<Card>();
             for (int i = 0; i < count; i++)
@@ -44,6 +51,15 @@ namespace OrleansMatchingServer
 
             var wallet = await walletGrain.GetWalletAsync();
 
+            _logger.LogInformation(
+                "Gacha succeeded. UserId={UserId}, Count={Count}, Cost={Cost}, PityPoint={PityPoint}, PaidGem={PaidGem}, FreeGem={FreeGem}",
+                userId,
+                count,
+                totalCost,
+                _state.State.PityPoint,
+                wallet.PaidGem,
+                wallet.FreeGem);
+
             return new GachaResult
             {
                 Cards = result,
@@ -52,7 +68,6 @@ namespace OrleansMatchingServer
                 FreeGem = wallet.FreeGem
             };
         }
-
 
         public Task<GachaState> GetPityInfoAsync() => Task.FromResult(_state.State);
 

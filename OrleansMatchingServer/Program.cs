@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Orleans.Hosting;
 using StackExchange.Redis;
 
@@ -17,7 +18,9 @@ await Host.CreateDefaultBuilder(args)
         var postgres = context.Configuration.GetConnectionString("Postgres");
         var redis = context.Configuration.GetConnectionString("Redis");
 
-        services.AddSingleton(new MatchHistoryRepository(postgres));
+        services.AddSingleton(sp => new MatchHistoryRepository(
+            postgres,
+            sp.GetRequiredService<ILogger<MatchHistoryRepository>>()));
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redis));
 
         services.AddSingleton<QueueCacheRepository>();
