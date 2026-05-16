@@ -1,14 +1,9 @@
 # Orleans Game Server
 
-Microsoft Orleans기반의 프로그램이다.<br>
-유저는 아이디와 비밀번호로 회원가입을 할 수 있고<br>
-뽑기 혹은 dice 매칭서버에 참여할 수 있다.<br>
+Microsoft Orleans 기반의 게임 서버 학습 프로젝트입니다.
 
-개발 1단계 같은 큐에 2명이 모이면 서버가 실시간으로 매칭을 진행하게 된다.<br>
-개발 2단계 스케줄러를 이용해서 몇분마다 매칭을 돌리는 시스템을 추가한다.<br>
-개발 3단계 매칭기록을 Redis와 SQL에 기록한다<br>
-개발 4단계 유저시스템 구현<br>
-개발 5단계 가챠시스템을 구현
+유저 로그인, 세션 관리, 매칭 큐, 매칭 결과 저장, 지갑, 가챠 콘텐츠를 Grain 단위로 분리해 구현했습니다.<br>
+게임 서버에서 자주 다루는 상태 관리, 비동기 처리, Redis 캐시, PostgreSQL 저장 흐름을 작은 규모로 실험하는 것을 목표로 합니다.
 
 # Orleans 학습정리
 https://blog.naver.com/rkdtlsgj/224198414818
@@ -20,16 +15,37 @@ https://blog.naver.com/rkdtlsgj/224198414818
 
 # 환경
 * .NET 8.0
-* Microsoft Orleans (Silo/Client)
-* Localhost clustering(개발용)
+* Microsoft Orleans
+* c# async/await
 * PostgreSQL
 * Redis
 
-# 개발 목적
-매치메이킹 처럼 동시 참가로 경쟁 조건이 생기기 쉬운문제를 Grain모델로 단순화하여 방지<br>
-채널명을 키로 체크하여 순차적으로 Grain 요청을 처리하여 순차적으로 처리하여 락없이 수행하기위함<br>
-Redis와 SQL을 연동하여 실시간 상태관리와 데이터를 저장하는 형태로 설계<br>
+# 주요 기능
+로그인 / 회원가입
+* 유저 ID를 Grain key로 사용합니다.
+* 회원가입 시 비밀번호 해시와 생성 시간을 저장합니다.
+* 로그인 성공 시 Redis에 24시간 유효한 세션을 저장합니다.
 
+매칭 큐
+* 채널 이름을 Grain key로 사용합니다.
+* 현재 클라이언트는 `dice` 채널에 입장합니다.
+* 같은 채널에 대기 중인 유저를 주기적으로 2명씩 매칭합니다.
+* 매칭 성공 시 양쪽 클라이언트에 Observer로 결과를 알립니다.
+* Redis에는 채널별 대기 유저와 유저별 현재 채널을 캐싱합니다.
+* PostgreSQL에는 매칭 완료 기록을 저장합니다.
+
+지갑
+* 유저 ID를 Grain key로 사용합니다.
+* 유료젬과 무료젬을 관리합니다.
+* 재화 사용 시 무료젬을 먼저 차감하고, 부족분을 유료젬에서 차감합니다.
+
+가챠
+* 유저 ID를 Grain key로 사용합니다.
+* 1회 뽑기와 10회 뽑기를 지원합니다.
+* 뽑기 실행 전 `WalletGrain`을 통해 재화를 차감합니다.
+* 뽑기 결과와 남은 재화를 클라이언트에 반환합니다.
+* 현재 카드 풀은 코드에 하드코딩되어 있으며, 추후 JSON 또는 DB 기반 테이블로 분리할 예정입니다.
+  
 <details>
   <summary>코드 보기</summary>
   타이머를 이용해 주기적으로 RunMatch를 실행하도록 추가<br>
@@ -43,13 +59,7 @@ Redis와 SQL을 연동하여 실시간 상태관리와 데이터를 저장하는
   var gachaGrain = clusterClient.GetGrain<IGachaGrain>(userId);<br>
   var walletGrain = clusterClient.GetGrain<IWalletGrain>(userId);<br>
   <img width="1096" height="128" alt="image" src="https://github.com/user-attachments/assets/b564106f-f8c4-44d2-8b6b-742f5818f94f" /><br>
-
-
-  
 </details>
-
-
-
 
 
 
