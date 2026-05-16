@@ -64,47 +64,26 @@ https://blog.naver.com/rkdtlsgj/224198414818
 
 
 # 테스트
-1단계<br>
-<details>
-<summary>결과 보기</summary>
-<img width="634" height="137" alt="image" src="https://github.com/user-attachments/assets/a97a1120-9f2d-43a1-9dea-61b7d7b63d80" />
-<img width="641" height="121" alt="image" src="https://github.com/user-attachments/assets/b4886409-e5ca-4f2b-bdd9-e302ff97b245" />
-</details>
 
-
-2단계<br>
 <details>
 <summary>결과 보기</summary>
 <img width="654" height="231" alt="image" src="https://github.com/user-attachments/assets/4e34b00c-5285-4b0e-8626-8b2943222524" /><br>
 <img width="273" height="158" alt="image" src="https://github.com/user-attachments/assets/764da523-4f1b-4c05-ae15-fc0b75f1b49c" /><br>
-타이머에 의해서 2명씩 매칭이되고 남은 한사람은 계속 기다리는 형태로 변경<br>
-</details>
+타이머에 의해서 2명씩 매칭이되고 남은 한사람은 계속 기다리는 형태로 변경<br><br>
 
-
-3단계<br>
-<details>
-<summary>결과 보기</summary>
 <img width="588" height="298" alt="Image" src="https://github.com/user-attachments/assets/3a887b01-31d8-45a4-b5a9-92e5491752bf" /><br>
 <img width="715" height="151" alt="Image" src="https://github.com/user-attachments/assets/294db437-db34-410c-80c2-7be9eed879ab" /><br>
 SQL에 매칭완료 이력 저장<br>
-Redis에 채널별로 대기 유저 확인<br>
-</details>
+Redis에 채널별로 대기 유저 확인<br><br>
 
-
-4단계<br>
-<details>
-<summary>결과 보기</summary>
 <img width="240" height="60" alt="image" src="https://github.com/user-attachments/assets/8afb4bb7-8172-4056-a7d1-84737c2ae55f" /><br>
 <img width="505" height="72" alt="image" src="https://github.com/user-attachments/assets/f2f550e9-5668-4774-854a-53b5fab99266" /><br>
-Redis에 SessionId 저장완료<br>
-</details>
+Redis에 SessionId 저장완료<br><br>
 
-5단계<br>
-<details>
-<summary>결과 보기</summary>
 <img width="256" height="431" alt="image" src="https://github.com/user-attachments/assets/88e55fd8-cb69-4b68-8aba-83f9b7263ebc" /><br>
 가챠시스템 구현
 </details>
+
 
 
 
