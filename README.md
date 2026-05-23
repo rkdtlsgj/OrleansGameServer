@@ -50,22 +50,6 @@ https://blog.naver.com/rkdtlsgj/224198414818
 로그 
 * ILogger를 이용하여 주요 서버 이벤트 기록합니다.
   
-<details>
-  <summary>코드 보기</summary>
-  타이머를 이용해 주기적으로 RunMatch를 실행하도록 추가<br>
-  <img width="489" height="450" alt="image" src="https://github.com/user-attachments/assets/8b08150b-8969-470d-92f3-c485b9c9fcd1" /><br>
-  <img width="451" height="323" alt="image" src="https://github.com/user-attachments/assets/a9a42733-da86-486d-bda4-ea95378e280a" /><br>
-  매칭시스템을 Grain을 이용해서 관리 동시성문제를 해결한다<br>
-  <img width="888" height="506" alt="image" src="https://github.com/user-attachments/assets/b9abe0b1-8f08-4389-bf1f-9f600c228653" /><br>
-
-  가챠시스템<br>
-  지갑과 가챠시스템은 User의 ID로 Key를 잡았다. 추후 UID로 수정작업<br>
-  var gachaGrain = clusterClient.GetGrain<IGachaGrain>(userId);<br>
-  var walletGrain = clusterClient.GetGrain<IWalletGrain>(userId);<br>
-  <img width="1096" height="128" alt="image" src="https://github.com/user-attachments/assets/b564106f-f8c4-44d2-8b6b-742f5818f94f" /><br>
-</details>
-
-
 
 # 테스트
 
@@ -80,11 +64,13 @@ https://blog.naver.com/rkdtlsgj/224198414818
 SQL에 매칭완료 이력 저장<br>
 Redis에 채널별로 대기 유저 확인<br><br>
 
-<img width="240" height="60" alt="image" src="https://github.com/user-attachments/assets/8afb4bb7-8172-4056-a7d1-84737c2ae55f" /><br>
-<img width="505" height="72" alt="image" src="https://github.com/user-attachments/assets/f2f550e9-5668-4774-854a-53b5fab99266" /><br>
-Redis에 SessionId 저장완료<br><br>
 
-<img width="256" height="431" alt="image" src="https://github.com/user-attachments/assets/88e55fd8-cb69-4b68-8aba-83f9b7263ebc" /><br>
+<img width="1045" height="295" alt="image" src="https://github.com/user-attachments/assets/ef5684a0-9322-4ff7-b72a-4b86ffd48f97" /><br>
+유저 정보 DB에 저장 추가<br><br>
+
+<img width="256" height="431" alt="image" src="https://github.com/user-attachments/assets/88e55fd8-cb69-4b68-8aba-83f9b7263ebc" />
+<img width="430" height="271" alt="image" src="https://github.com/user-attachments/assets/ee3c6c48-2522-4e75-aedd-f06833c17926" /><br>
+
 가챠시스템 구현
 </details>
 
