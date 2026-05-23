@@ -14,7 +14,7 @@ https://blog.naver.com/rkdtlsgj/224198414818
 
 
 # 환경
-* .NET 8.0
+* .NET 10.0
 * Microsoft Orleans
 * c# async/await
 * PostgreSQL
