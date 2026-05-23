@@ -45,6 +45,9 @@ https://blog.naver.com/rkdtlsgj/224198414818
 * 뽑기 실행 전 `WalletGrain`을 통해 재화를 차감합니다.
 * 뽑기 결과와 남은 재화를 클라이언트에 반환합니다.
 * 현재 카드 풀은 코드에 하드코딩되어 있으며, 추후 JSON 또는 DB 기반 테이블로 분리할 예정입니다.
+
+로그 
+* ILogger를 이용하여 주요 서버 이벤트 기록합니다.
   
 <details>
   <summary>코드 보기</summary>
