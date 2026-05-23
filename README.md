@@ -14,7 +14,7 @@ https://blog.naver.com/rkdtlsgj/224198414818
 
 
 # 환경
-* .NET 8.0
+* .NET 10.0
 * Microsoft Orleans
 * c# async/await
 * PostgreSQL
@@ -23,7 +23,8 @@ https://blog.naver.com/rkdtlsgj/224198414818
 # 주요 기능
 로그인 / 회원가입
 * 유저 ID를 Grain key로 사용합니다.
-* 회원가입 시 비밀번호 해시와 생성 시간을 저장합니다.
+* 회원가입 시 비밀번호 해시와 생성 시간을 DB에 저장합니다.
+* 로그인시 DB의 유저 정보를 조회해 검증합니다.
 * 로그인 성공 시 Redis에 24시간 유효한 세션을 저장합니다.
 
 매칭 큐
@@ -44,7 +45,7 @@ https://blog.naver.com/rkdtlsgj/224198414818
 * 1회 뽑기와 10회 뽑기를 지원합니다.
 * 뽑기 실행 전 `WalletGrain`을 통해 재화를 차감합니다.
 * 뽑기 결과와 남은 재화를 클라이언트에 반환합니다.
-* 현재 카드 풀은 코드에 하드코딩되어 있으며, 추후 JSON 또는 DB 기반 테이블로 분리할 예정입니다.
+* character_info 테이블을 이용해 캐릭터 정보를 조회합니다.
 
 로그 
 * ILogger를 이용하여 주요 서버 이벤트 기록합니다.
