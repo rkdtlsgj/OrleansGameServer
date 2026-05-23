@@ -24,7 +24,7 @@ namespace OrleansMatchingServer
             await _state.WriteStateAsync();
 
             _logger.LogInformation(
-                "Gem added. UserId={UserId}, PaidGemAdded={PaidGemAdded}, FreeGemAdded={FreeGemAdded}, PaidGem={PaidGem}, FreeGem={FreeGem}",
+                "자원 추가. UserId={UserId}, PaidGemAdded={PaidGemAdded}, FreeGemAdded={FreeGemAdded}, PaidGem={PaidGem}, FreeGem={FreeGem}",
                 this.GetPrimaryKeyString(),
                 paidGem,
                 freeGem,
@@ -40,7 +40,7 @@ namespace OrleansMatchingServer
             if (total < amount)
             {
                 _logger.LogWarning(
-                    "Gem spend failed. UserId={UserId}, Amount={Amount}, PaidGem={PaidGem}, FreeGem={FreeGem}",
+                    "자원 부족. UserId={UserId}, Amount={Amount}, PaidGem={PaidGem}, FreeGem={FreeGem}",
                     this.GetPrimaryKeyString(),
                     amount,
                     _state.State.PaidGem,
@@ -59,7 +59,7 @@ namespace OrleansMatchingServer
             await _state.WriteStateAsync();
 
             _logger.LogInformation(
-                "Gem spent. UserId={UserId}, Amount={Amount}, FreeGemUsed={FreeGemUsed}, PaidGemUsed={PaidGemUsed}, PaidGem={PaidGem}, FreeGem={FreeGem}",
+                "자원 변동. UserId={UserId}, Amount={Amount}, FreeGemUsed={FreeGemUsed}, PaidGemUsed={PaidGemUsed}, PaidGem={PaidGem}, FreeGem={FreeGem}",
                 this.GetPrimaryKeyString(),
                 amount,
                 freeUsed,

@@ -41,11 +41,6 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
                 KeepAlive = true
             });
 
-        _logger.LogInformation(
-            "Matching queue Channel={Channel}, MatchIntervalSeconds={MatchIntervalSeconds}",
-            this.GetPrimaryKeyString(),
-            MatchInterval.TotalSeconds);
-
         return Task.CompletedTask;
     }
 
@@ -53,11 +48,6 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
     public override Task OnDeactivateAsync(DeactivationReason reason, CancellationToken cancellationToken)
     {
         _timer.Dispose();
-
-        _logger.LogInformation(
-            "Matching queue Channel={Channel}, WaitingCount={WaitingCount}",
-            this.GetPrimaryKeyString(),
-            _waiting.Count);
 
         return Task.CompletedTask;
     }
@@ -74,7 +64,7 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
             Queued(observer);
 
             _logger.LogInformation(
-                "Queue observer refreshed. Channel={Channel}, UserId={UserId}, WaitingCount={WaitingCount}",
+                "대기열 등록. Channel={Channel}, UserId={UserId}, WaitingCount={WaitingCount}",
                 key,
                 nickname,
                 _waiting.Count);
@@ -88,7 +78,7 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
         await _queueCacheRepository.AddToQueueAsync(key, nickname);
 
         _logger.LogInformation(
-            "User entered queue. Channel={Channel}, UserId={UserId}, WaitingCount={WaitingCount}",
+            "대기열 참가. Channel={Channel}, UserId={UserId}, WaitingCount={WaitingCount}",
             key,
             nickname,
             _waiting.Count);
@@ -106,7 +96,7 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
             await _queueCacheRepository.RemoveFromQueueAsync(key, nickname);
 
             _logger.LogInformation(
-                "Queue canceled. Channel={Channel}, UserId={UserId}, WaitingCount={WaitingCount}",
+                "매칭 취소. Channel={Channel}, UserId={UserId}, WaitingCount={WaitingCount}",
                 key,
                 nickname,
                 _waiting.Count);
@@ -117,7 +107,7 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
         else
         {
             _logger.LogDebug(
-                "Queue not waiting. Channel={Channel}, UserId={UserId}",
+                "대기열에 존재하지 않음. Channel={Channel}, UserId={UserId}",
                 key,
                 nickname);
         }
@@ -165,7 +155,7 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
         BroadcastSystem($"[매칭중] 대기인원 : {_waiting.Count}");
 
         _logger.LogInformation(
-            "Matching started. Channel={Channel}, WaitingCount={WaitingCount}",
+            "매칭 시작. Channel={Channel}, WaitingCount={WaitingCount}",
             key,
             _waiting.Count);
 
@@ -191,7 +181,7 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
             await _historyRepository.SaveMatchAsync(matchId, key, p1, p2, createdAt);
 
             _logger.LogInformation(
-                "Match completed. MatchId={MatchId}, Channel={Channel}, Player1={Player1}, Player2={Player2}",
+                "매칭 완료. MatchId={MatchId}, Channel={Channel}, Player1={Player1}, Player2={Player2}",
                 matchId,
                 key,
                 p1,
@@ -202,7 +192,7 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
         }
 
         _logger.LogInformation(
-            "Matching finished. Channel={Channel}, RemainingWaitingCount={WaitingCount}",
+            "매칭 종료. Channel={Channel}, RemainingWaitingCount={WaitingCount}",
             key,
             _waiting.Count);
 

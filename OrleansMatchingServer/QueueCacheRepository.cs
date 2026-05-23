@@ -21,7 +21,7 @@ public class QueueCacheRepository
         await Task.WhenAll(t1, t2);
 
         _logger.LogInformation(
-            "Queue cache added. Channel={Channel}, UserId={UserId}",
+            "AddToQueueAsync. Channel={Channel}, UserId={UserId}",
             channel,
             nickname);
     }
@@ -35,20 +35,8 @@ public class QueueCacheRepository
         await Task.WhenAll(t1, t2);
 
         _logger.LogInformation(
-            "Queue cache removed. Channel={Channel}, UserId={UserId}",
+            "RemoveFromQueueAsync. Channel={Channel}, UserId={UserId}",
             channel,
             nickname);
-    }
-
-    public async Task<long> GetQueueCountAsync(string channel)
-    {
-        var count = await _db.SetLengthAsync($"channel:{channel}:members");
-
-        _logger.LogDebug(
-            "Queue cache count read. Channel={Channel}, WaitingCount={WaitingCount}",
-            channel,
-            count);
-
-        return count;
     }
 }

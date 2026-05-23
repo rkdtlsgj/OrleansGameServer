@@ -20,7 +20,7 @@ namespace OrleansMatchingServer
                 return;
 
             var id = this.GetPrimaryKey();
-            _info.State = new MatchInfo(id, key, player1, player2, DateTimeOffset.Now);
+            _info.State = new MatchInfo(id, key, player1, player2, DateTimeOffset.UtcNow);
 
             await _info.WriteStateAsync();
         }

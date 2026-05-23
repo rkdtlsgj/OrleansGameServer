@@ -3,13 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans.Hosting;
+using OrleansMatchingServer;
 using StackExchange.Redis;
 
 
 await Host.CreateDefaultBuilder(args)
     .UseOrleans(silo => silo.UseLocalhostClustering()
     .AddMemoryGrainStorage("matchStore")
-    .AddMemoryGrainStorage("playerStore")
     .AddMemoryGrainStorage("gachaStore")
     .AddMemoryGrainStorage("walletStore"))
 
@@ -21,6 +21,10 @@ await Host.CreateDefaultBuilder(args)
         services.AddSingleton(sp => new MatchHistoryRepository(
             postgres,
             sp.GetRequiredService<ILogger<MatchHistoryRepository>>()));
+        services.AddSingleton(sp => new GachaDataRepository(
+            postgres,
+            sp.GetRequiredService<ILogger<GachaDataRepository>>()));
+        services.AddSingleton(_ => new UserRepository(postgres));
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redis));
 
         services.AddSingleton<QueueCacheRepository>();
