@@ -6,7 +6,7 @@ Microsoft Orleans 기반의 게임 서버 학습 프로젝트입니다.
 게임 서버에서 자주 다루는 상태 관리, 비동기 처리, Redis 캐시, PostgreSQL 저장 흐름을 작은 규모로 실험하는 것을 목표로 합니다.
 
 # Orleans 학습정리
-https://blog.naver.com/rkdtlsgj/224198414818
+https://blog.naver.com/rkdtlsgj/224298880418
 
 # 서버 구조
 
