@@ -1,24 +1,21 @@
 using Common;
 using Microsoft.Extensions.Logging;
-using StackExchange.Redis;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace OrleansMatchingServer
 {
     public class LoginGrain : Grain, ILoginGrain
     {
         private readonly UserRepository _userRepository;
-        private readonly IConnectionMultiplexer _redis;
+        private readonly SessionRepository _sessionRepository;
         private readonly ILogger<LoginGrain> _logger;
 
         public LoginGrain(
             UserRepository userRepository,
-            IConnectionMultiplexer redis,
+            SessionRepository sessionRepository,
             ILogger<LoginGrain> logger)
         {
             _userRepository = userRepository;
-            _redis = redis;
+            _sessionRepository = sessionRepository;
             _logger = logger;
         }
 
@@ -26,7 +23,7 @@ namespace OrleansMatchingServer
         {
             var userId = this.GetPrimaryKeyString();
             var createdTime = DateTimeOffset.UtcNow;
-            var passwordHash = HashPassword(psw);
+            var passwordHash = PasswordHasher.Hash(psw);
 
             var created = await _userRepository.CreateUserAsync(userId, passwordHash, createdTime);
             if (created == false)
@@ -60,7 +57,8 @@ namespace OrleansMatchingServer
                 return null;
             }
 
-            if (user.PasswordHash != HashPassword(psw))
+            var verification = PasswordHasher.Verify(psw, user.PasswordHash);
+            if (verification.Verified == false)
             {
                 _logger.LogWarning(
                     "비밀번호 오류. UserId={UserId}",
@@ -69,10 +67,16 @@ namespace OrleansMatchingServer
                 return null;
             }
 
-            var sessionId = Guid.NewGuid().ToString();
-            var db = _redis.GetDatabase();
+            if (verification.NeedsRehash)
+            {
+                await _userRepository.UpdatePasswordHashAsync(user.UserId, PasswordHasher.Hash(psw));
 
-            await db.StringSetAsync($"session:{sessionId}", user.UserId, TimeSpan.FromHours(24));
+                _logger.LogInformation(
+                    "비밀번호 해시 업그레이드. UserId={UserId}",
+                    user.UserId);
+            }
+
+            var sessionId = await _sessionRepository.CreateSessionAsync(user.UserId, TimeSpan.FromHours(24));
 
             _logger.LogInformation(
                 "로그인 성공. UserId={UserId}, SessionExpiresInHours={SessionExpiresInHours}",
@@ -80,12 +84,6 @@ namespace OrleansMatchingServer
                 24);
 
             return sessionId;
-        }
-
-        private static string HashPassword(string psw)
-        {
-            var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(psw));
-            return Convert.ToHexString(bytes);
         }
     }
 }

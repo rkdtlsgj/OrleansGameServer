@@ -2,7 +2,7 @@
 {
     public interface IGachaGrain : IGrainWithStringKey
     {
-        Task<GachaResult> DrawAsync(int count);
-        Task<GachaState> GetPityInfoAsync();
+        Task<GachaResult> DrawAsync(string sessionId, int count);
+        Task<GachaState> GetPityInfoAsync(string sessionId);
     }
 }

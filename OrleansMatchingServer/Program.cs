@@ -15,8 +15,8 @@ await Host.CreateDefaultBuilder(args)
 
     .ConfigureServices((context, services) =>
     {
-        var postgres = context.Configuration.GetConnectionString("Postgres");
-        var redis = context.Configuration.GetConnectionString("Redis");
+        var postgres = GetRequiredConnectionString(context.Configuration, "Postgres");
+        var redis = GetRequiredConnectionString(context.Configuration, "Redis");
 
         services.AddSingleton(sp => new MatchHistoryRepository(
             postgres,
@@ -28,6 +28,13 @@ await Host.CreateDefaultBuilder(args)
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redis));
 
         services.AddSingleton<QueueCacheRepository>();
+        services.AddSingleton<SessionRepository>();
 
     })
     .RunConsoleAsync();
+
+static string GetRequiredConnectionString(IConfiguration configuration, string name)
+{
+    return configuration.GetConnectionString(name)
+        ?? throw new InvalidOperationException($"Connection string '{name}' is missing.");
+}

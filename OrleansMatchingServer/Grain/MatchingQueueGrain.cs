@@ -1,17 +1,19 @@
 using Common;
 using Microsoft.Extensions.Logging;
 using Orleans;
+using OrleansMatchingServer;
 
 public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
 {
     private readonly MatchHistoryRepository _historyRepository;
     private readonly QueueCacheRepository _queueCacheRepository;
+    private readonly SessionRepository _sessionRepository;
     private readonly ILogger<MatchingQueueGrain> _logger;
 
     private readonly Dictionary<string, IMatchObserver> _waiting = new();
     private readonly Queue<string> _order = new();
 
-    private IDisposable _timer;
+    private IDisposable? _timer;
 
     //테스트용 매칭 대기시간
     private static readonly TimeSpan MatchInterval = TimeSpan.FromMinutes(1);
@@ -19,10 +21,12 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
     public MatchingQueueGrain(
         MatchHistoryRepository historyRepository,
         QueueCacheRepository queueCacheRepository,
+        SessionRepository sessionRepository,
         ILogger<MatchingQueueGrain> logger)
     {
         _historyRepository = historyRepository;
         _queueCacheRepository = queueCacheRepository;
+        _sessionRepository = sessionRepository;
         _logger = logger;
     }
 
@@ -47,14 +51,15 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
     //Unity의 Destroy같은 개념
     public override Task OnDeactivateAsync(DeactivationReason reason, CancellationToken cancellationToken)
     {
-        _timer.Dispose();
+        _timer?.Dispose();
 
         return Task.CompletedTask;
     }
 
-    public async Task Enqueue(string nickname, IMatchObserver observer)
+    public async Task Enqueue(string sessionId, IMatchObserver observer)
     {
         var key = this.GetPrimaryKeyString();
+        var nickname = await _sessionRepository.GetRequiredUserIdAsync(sessionId);
 
         //중복방지
         if (_waiting.ContainsKey(nickname))
@@ -87,9 +92,10 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
         BroadcastQueued();
     }
 
-    public async Task Cancel(string nickname)
+    public async Task Cancel(string sessionId)
     {
         var key = this.GetPrimaryKeyString();
+        var nickname = await _sessionRepository.GetRequiredUserIdAsync(sessionId);
 
         if (_waiting.Remove(nickname))
         {

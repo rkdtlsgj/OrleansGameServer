@@ -52,6 +52,22 @@ public class UserRepository
 
         return await conn.QuerySingleOrDefaultAsync<UserData>(sql, new { UserId = userId });
     }
+
+    public async Task UpdatePasswordHashAsync(string userId, string passwordHash)
+    {
+        const string sql = """
+            update user_info
+            set password_hash = @PasswordHash
+            where user_id = @UserId;
+            """;
+
+        await using var conn = new NpgsqlConnection(_connectionString);
+        await conn.ExecuteAsync(sql, new
+        {
+            UserId = userId,
+            PasswordHash = passwordHash
+        });
+    }
 }
 
 public sealed class UserData

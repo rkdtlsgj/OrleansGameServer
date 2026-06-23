@@ -66,23 +66,23 @@ while (true)
         case "1":
             Console.WriteLine("\n매칭을 시작합니다...");
             var queueGrain = client.GetGrain<IMatchmakingQueueGrain>("dice");
-            await queueGrain.Enqueue(loggedInUser!, observerRef);
+            await queueGrain.Enqueue(sessionId!, observerRef);
             Console.WriteLine("매칭 대기 중... (아무 키나 누르면 취소)");
             Console.ReadKey();
-            await queueGrain.Cancel(loggedInUser!);
+            await queueGrain.Cancel(sessionId!);
             Console.WriteLine("매칭 취소됨\n");
             break;
 
         // 가챠
         case "2":
-            await RunGachaMenu(client, loggedInUser!);
+            await RunGachaMenu(client, sessionId!, loggedInUser!);
             break;
 
         // 충전
         case "3":
             var walletGrain = client.GetGrain<IWalletGrain>(loggedInUser!);
-            await walletGrain.AddGemAsync(paidGem: 0, freeGem: 3200);
-            var wallet = await walletGrain.GetWalletAsync();
+            await walletGrain.AddGemAsync(sessionId!, paidGem: 0, freeGem: 3200);
+            var wallet = await walletGrain.GetWalletAsync(sessionId!);
             Console.WriteLine($"충전 완료! 유료젬: {wallet.PaidGem}  무료젬: {wallet.FreeGem}\n");
             break;
 
@@ -99,15 +99,15 @@ while (true)
 }
 
 // 가챠
-async Task RunGachaMenu(IClusterClient clusterClient, string userId)
+async Task RunGachaMenu(IClusterClient clusterClient, string sessionId, string userId)
 {
     var gachaGrain = clusterClient.GetGrain<IGachaGrain>(userId);
     var walletGrain = clusterClient.GetGrain<IWalletGrain>(userId);
 
     while (true)
     {
-        var wallet = await walletGrain.GetWalletAsync();
-        var pity = await gachaGrain.GetPityInfoAsync();
+        var wallet = await walletGrain.GetWalletAsync(sessionId);
+        var pity = await gachaGrain.GetPityInfoAsync(sessionId);
 
         Console.WriteLine("\n=== 가챠 ===");
         Console.WriteLine($"유료젬: {wallet.PaidGem}  무료젬: {wallet.FreeGem}");
@@ -129,7 +129,7 @@ async Task RunGachaMenu(IClusterClient clusterClient, string userId)
 
         try
         {
-            var result = await gachaGrain.DrawAsync(count);
+            var result = await gachaGrain.DrawAsync(sessionId, count);
 
             Console.WriteLine("\n── 뽑기 결과 ──");
             foreach (var card in result.Cards)
