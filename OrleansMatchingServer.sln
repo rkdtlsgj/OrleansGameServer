@@ -31,6 +31,10 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(MultipleStartupProjects) = postSolution
+		{FE66A5F8-DF83-47E4-9756-000B493970A3}.dwStartupOpt = 1
+		{6A1A9940-D4D4-4BC0-8A4E-A4EA1087E485}.dwStartupOpt = 1
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B3121D79-8763-44E4-906E-AFA00141F63D}
 	EndGlobalSection
