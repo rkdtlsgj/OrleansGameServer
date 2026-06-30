@@ -20,6 +20,93 @@ https://blog.naver.com/rkdtlsgj/224298880418
 * PostgreSQL
 * Redis
 
+# 실행 방법
+
+## 1. 사전 준비
+* .NET 10.0 SDK
+* 로컬 또는 원격 PostgreSQL 인스턴스
+* 로컬 또는 원격 Redis 인스턴스
+
+## 2. PostgreSQL 데이터베이스 및 테이블 생성
+
+`OrleansMatchingServer/appsettings.json`의 기본값은 `matching`이라는 이름의 DB를 가리킵니다. 먼저 DB를 만들고, 아래 테이블을 생성합니다.
+
+```sql
+create database matching;
+
+create table user_info (
+    user_id text primary key,
+    password_hash text not null,
+    created_time timestamptz not null
+);
+
+create table match_history (
+    match_id uuid primary key,
+    channel text not null,
+    player1 text not null,
+    player2 text not null,
+    created_at timestamptz not null
+);
+
+create table character_info (
+    card_id uuid primary key,
+    name text not null,
+    rarity text not null
+);
+
+create table gacha_probability (
+    rarity text primary key,
+    probability numeric not null
+);
+```
+
+`character_info`와 `gacha_probability`에는 가챠 동작을 위한 시드 데이터가 최소 1개 이상 들어 있어야 합니다. 예시:
+
+```sql
+insert into gacha_probability (rarity, probability) values
+    ('N', 0.7),
+    ('SR', 0.25),
+    ('SSR', 0.05);
+
+insert into character_info (card_id, name, rarity) values
+    (gen_random_uuid(), '테스트 캐릭터 N', 'N'),
+    (gen_random_uuid(), '테스트 캐릭터 SR', 'SR'),
+    (gen_random_uuid(), '테스트 캐릭터 SSR', 'SSR');
+```
+
+## 3. 연결 정보 설정
+
+`OrleansMatchingServer/appsettings.json`에서 PostgreSQL과 Redis 연결 문자열을 환경에 맞게 수정합니다.
+
+```json
+{
+  "ConnectionStrings": {
+    "Postgres": "Host=localhost;Port=5432;Database=matching;Username=postgres;Password=matching_dev",
+    "Redis": "localhost:6379"
+  }
+}
+```
+
+## 4. 서버 실행
+
+```bash
+cd OrleansMatchingServer
+dotnet run
+```
+
+## 5. 클라이언트 실행
+
+서버가 기동된 상태에서 별도 터미널로 실행합니다.
+
+```bash
+cd Client
+dotnet run
+```
+
+클라이언트에서 회원가입 후 로그인하면 매칭, 가챠, 젬 충전 메뉴를 사용할 수 있습니다. 매칭은 같은 `dice` 채널에 두 명 이상 접속해야 1분 주기 타이머에 의해 매칭됩니다.
+
+> 현재 Grain 상태(지갑, 가챠 포인트, 매칭 기록)는 `AddMemoryGrainStorage`로 구성되어 있어 서버를 재시작하면 초기화됩니다. PostgreSQL 기반 영속화(AdoNet Persistence)는 추후 적용 예정입니다.
+> 
 # 주요 기능
 로그인 / 회원가입
 * 유저 ID를 Grain key로 사용합니다.
