@@ -1,4 +1,4 @@
-﻿using Common;
+using Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Orleans.Hosting;
@@ -30,17 +30,26 @@ while (sessionId == null)
 
     var loginGrain = client.GetGrain<ILoginGrain>(userId);
 
-    if (choice == "2")
+    try
     {
-        var ok = await loginGrain.RegisterAsync(password);
-        Console.WriteLine(ok ? "회원가입 성공!" : "회원가입 실패");
-        continue;
-    }
+        if (choice == "2")
+        {
+            var ok = await loginGrain.RegisterAsync(password);
+            Console.WriteLine(ok ? "회원가입 성공!" : "회원가입 실패");
+            continue;
+        }
 
-    sessionId = await loginGrain.LoginAsync(password);
-    if (sessionId == null)
+        sessionId = await loginGrain.LoginAsync(password);
+        if (sessionId == null)
+        {
+            Console.WriteLine("아이디 또는 비밀번호가 틀렸습니다.\n");
+            continue;
+        }
+    }
+    catch (Exception ex)
     {
-        Console.WriteLine("아이디 또는 비밀번호가 틀렸습니다.\n");
+        Console.WriteLine($"서버 오류: {ex.Message}");
+        Console.WriteLine("설정을 확인한 뒤 다시 시도하세요.\n");
         continue;
     }
 
@@ -114,11 +123,54 @@ async Task RunGachaMenu(IClusterClient clusterClient, string sessionId, string u
         Console.WriteLine($"포인트: {pity.PityPoint}");
         Console.WriteLine("1. 1연챠 (160젬)");
         Console.WriteLine("2. 10연챠 (1600젬)");
+        Console.WriteLine("3. 가챠 이력 확인");
+        Console.WriteLine("4. 보유 캐릭터 확인");
         Console.WriteLine("0. 로비로 돌아가기");
         Console.Write("선택: ");
 
         var input = Console.ReadLine();
         if (input == "0") break;
+
+        if (input == "3")
+        {
+            var history = await gachaGrain.GetHistoryAsync(sessionId, 20);
+
+            Console.WriteLine("\n── 최근 가챠 이력 ──");
+            if (history.Count == 0)
+            {
+                Console.WriteLine("이력이 없습니다.\n");
+                continue;
+            }
+
+            foreach (var item in history)
+            {
+                var pityLabel = item.IsPity ? " 천장" : "";
+                Console.WriteLine($"  {item.ObtainedAt:yyyy-MM-dd HH:mm:ss} [{item.Rarity}] {item.Name}{pityLabel}");
+            }
+
+            Console.WriteLine();
+            continue;
+        }
+
+        if (input == "4")
+        {
+            var characters = await gachaGrain.GetCharactersAsync(sessionId);
+
+            Console.WriteLine("\n── 보유 캐릭터 ──");
+            if (characters.Count == 0)
+            {
+                Console.WriteLine("보유 캐릭터가 없습니다.\n");
+                continue;
+            }
+
+            foreach (var character in characters)
+            {
+                Console.WriteLine($"  [{character.Rarity}] {character.Name} x{character.Count}");
+            }
+
+            Console.WriteLine();
+            continue;
+        }
 
         int count = input == "1" ? 1 : input == "2" ? 10 : 0;
         if (count == 0)
@@ -136,7 +188,8 @@ async Task RunGachaMenu(IClusterClient clusterClient, string sessionId, string u
             {
                 var star = card.Rarity == "SSR" ? " ★★★" :
                            card.Rarity == "SR" ? " ★★" : "";
-                Console.WriteLine($"  [{card.Rarity}] {card.Name}{star}");
+                var pityMark = card.IsPity ? " (천장)" : "";
+                Console.WriteLine($"  [{card.Rarity}] {card.Name}{star}{pityMark}");
             }
 
             Console.WriteLine($"포인트: {result.PityPoint}");

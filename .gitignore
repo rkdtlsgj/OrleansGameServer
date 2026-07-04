@@ -8,6 +8,7 @@
 # Build outputs
 [Bb]in/
 [Oo]bj/
+.build/
 
 # .NET
 TestResults/

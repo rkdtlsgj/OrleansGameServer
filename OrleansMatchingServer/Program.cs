@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -9,9 +9,7 @@ using StackExchange.Redis;
 
 await Host.CreateDefaultBuilder(args)
     .UseOrleans(silo => silo.UseLocalhostClustering()
-    .AddMemoryGrainStorage("matchStore")
-    .AddMemoryGrainStorage("gachaStore")
-    .AddMemoryGrainStorage("walletStore"))
+    .AddMemoryGrainStorage("matchStore"))
 
     .ConfigureServices((context, services) =>
     {
@@ -24,6 +22,8 @@ await Host.CreateDefaultBuilder(args)
         services.AddSingleton(sp => new GachaDataRepository(
             postgres,
             sp.GetRequiredService<ILogger<GachaDataRepository>>()));
+        services.AddSingleton(_ => new WalletRepository(postgres));
+        services.AddSingleton(_ => new GachaHistoryRepository(postgres));
         services.AddSingleton(_ => new UserRepository(postgres));
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redis));
 

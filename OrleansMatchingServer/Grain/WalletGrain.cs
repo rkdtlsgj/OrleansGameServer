@@ -5,16 +5,16 @@ namespace OrleansMatchingServer
 {
     public class WalletGrain : Grain, IWalletGrain
     {
-        private readonly IPersistentState<PlayerWallet> _state;
+        private readonly WalletRepository _walletRepository;
         private readonly SessionRepository _sessionRepository;
         private readonly ILogger<WalletGrain> _logger;
 
         public WalletGrain(
-            [PersistentState("wallet", "walletStore")] IPersistentState<PlayerWallet> state,
+            WalletRepository walletRepository,
             SessionRepository sessionRepository,
             ILogger<WalletGrain> logger)
         {
-            _state = state;
+            _walletRepository = walletRepository;
             _sessionRepository = sessionRepository;
             _logger = logger;
         }
@@ -29,25 +29,24 @@ namespace OrleansMatchingServer
             if (freeGem < 0)
                 throw new ArgumentOutOfRangeException(nameof(freeGem), "충전할 무료젬은 0 이상이어야 합니다.");
 
-            _state.State.PaidGem += paidGem;
-            _state.State.FreeGem += freeGem;
-
-            await _state.WriteStateAsync();
+            var userId = this.GetPrimaryKeyString();
+            await _walletRepository.AddGemAsync(userId, paidGem, freeGem);
+            var wallet = await _walletRepository.GetWalletAsync(userId);
 
             _logger.LogInformation(
                 "재화 추가. UserId={UserId}, PaidGemAdded={PaidGemAdded}, FreeGemAdded={FreeGemAdded}, PaidGem={PaidGem}, FreeGem={FreeGem}",
-                this.GetPrimaryKeyString(),
+                userId,
                 paidGem,
                 freeGem,
-                _state.State.PaidGem,
-                _state.State.FreeGem);
+                wallet.PaidGem,
+                wallet.FreeGem);
         }
 
         public async Task<PlayerWallet> GetWalletAsync(string sessionId)
         {
             await EnsureSessionAsync(sessionId);
 
-            return _state.State;
+            return await _walletRepository.GetWalletAsync(this.GetPrimaryKeyString());
         }
 
         public async Task<SpendGemResult> SpendGemAsync(string sessionId, int amount)
@@ -57,42 +56,32 @@ namespace OrleansMatchingServer
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount), "사용할 재화는 0보다 커야 합니다.");
 
-            var total = _state.State.PaidGem + _state.State.FreeGem;
-            if (total < amount)
+            var userId = this.GetPrimaryKeyString();
+            var result = await _walletRepository.SpendGemAsync(userId, amount);
+            var wallet = await _walletRepository.GetWalletAsync(userId);
+
+            if (result.Success == false)
             {
                 _logger.LogWarning(
                     "재화 부족. UserId={UserId}, Amount={Amount}, PaidGem={PaidGem}, FreeGem={FreeGem}",
-                    this.GetPrimaryKeyString(),
+                    userId,
                     amount,
-                    _state.State.PaidGem,
-                    _state.State.FreeGem);
+                    wallet.PaidGem,
+                    wallet.FreeGem);
 
-                return new SpendGemResult { Success = false };
+                return result;
             }
-
-            var freeUsed = Math.Min(_state.State.FreeGem, amount);
-            _state.State.FreeGem -= freeUsed;
-
-            var paidUsed = amount - freeUsed;
-            _state.State.PaidGem -= paidUsed;
-
-            await _state.WriteStateAsync();
 
             _logger.LogInformation(
                 "재화 사용. UserId={UserId}, Amount={Amount}, FreeGemUsed={FreeGemUsed}, PaidGemUsed={PaidGemUsed}, PaidGem={PaidGem}, FreeGem={FreeGem}",
-                this.GetPrimaryKeyString(),
+                userId,
                 amount,
-                freeUsed,
-                paidUsed,
-                _state.State.PaidGem,
-                _state.State.FreeGem);
+                result.FreeGemUsed,
+                result.PaidGemUsed,
+                wallet.PaidGem,
+                wallet.FreeGem);
 
-            return new SpendGemResult
-            {
-                Success = true,
-                PaidGemUsed = paidUsed,
-                FreeGemUsed = freeUsed
-            };
+            return result;
         }
 
         private Task EnsureSessionAsync(string sessionId)

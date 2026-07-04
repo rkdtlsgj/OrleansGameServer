@@ -6,20 +6,22 @@ namespace OrleansMatchingServer
     public class GachaGrain : Grain, IGachaGrain
     {
         private const int Cost = 160;
+        private const int PityThreshold = 90;
+        private const string PityRarity = "SSR";
 
-        private readonly IPersistentState<GachaState> _state;
         private readonly GachaDataRepository _gachaDataRepository;
+        private readonly GachaHistoryRepository _gachaHistoryRepository;
         private readonly SessionRepository _sessionRepository;
         private readonly ILogger<GachaGrain> _logger;
 
         public GachaGrain(
-            [PersistentState("gacha", "gachaStore")] IPersistentState<GachaState> state,
             GachaDataRepository gachaDataRepository,
+            GachaHistoryRepository gachaHistoryRepository,
             SessionRepository sessionRepository,
             ILogger<GachaGrain> logger)
         {
-            _state = state;
             _gachaDataRepository = gachaDataRepository;
+            _gachaHistoryRepository = gachaHistoryRepository;
             _sessionRepository = sessionRepository;
             _logger = logger;
         }
@@ -48,17 +50,17 @@ namespace OrleansMatchingServer
                 throw new InvalidOperationException("재화가 부족합니다.");
             }
 
-            var originalPityPoint = _state.State.PityPoint;
-            var stateWritten = false;
+            var pityPoint = await _gachaHistoryRepository.GetPityPointAsync(userId);
+            var historyWritten = false;
 
             try
             {
                 var result = new List<Card>();
                 for (var i = 0; i < count; i++)
-                    result.Add(DrawOne(table));
+                    result.Add(DrawOne(table, ref pityPoint));
 
-                await _state.WriteStateAsync();
-                stateWritten = true;
+                await _gachaHistoryRepository.SaveDrawAsync(userId, result, pityPoint);
+                historyWritten = true;
 
                 var wallet = await walletGrain.GetWalletAsync(sessionId);
 
@@ -67,25 +69,22 @@ namespace OrleansMatchingServer
                     userId,
                     count,
                     totalCost,
-                    _state.State.PityPoint,
+                    pityPoint,
                     wallet.PaidGem,
                     wallet.FreeGem);
 
                 return new GachaResult
                 {
                     Cards = result,
-                    PityPoint = _state.State.PityPoint,
+                    PityPoint = pityPoint,
                     PaidGem = wallet.PaidGem,
                     FreeGem = wallet.FreeGem
                 };
             }
             catch
             {
-                if (stateWritten == false)
-                {
-                    _state.State.PityPoint = originalPityPoint;
+                if (historyWritten == false)
                     await walletGrain.AddGemAsync(sessionId, spendResult.PaidGemUsed, spendResult.FreeGemUsed);
-                }
 
                 throw;
             }
@@ -93,20 +92,50 @@ namespace OrleansMatchingServer
 
         public async Task<GachaState> GetPityInfoAsync(string sessionId)
         {
-            await _sessionRepository.EnsureUserSessionAsync(sessionId, this.GetPrimaryKeyString());
+            var userId = this.GetPrimaryKeyString();
+            await _sessionRepository.EnsureUserSessionAsync(sessionId, userId);
 
-            return _state.State;
+            return new GachaState
+            {
+                PityPoint = await _gachaHistoryRepository.GetPityPointAsync(userId)
+            };
         }
 
-        private Card DrawOne(GachaTable table)
+        public async Task<IReadOnlyList<GachaHistoryItem>> GetHistoryAsync(string sessionId, int limit)
         {
-            _state.State.PityPoint++;
-            var rarity = PickRarity(table.Probabilities);
+            var userId = this.GetPrimaryKeyString();
+            await _sessionRepository.EnsureUserSessionAsync(sessionId, userId);
+
+            return await _gachaHistoryRepository.GetHistoryAsync(userId, limit);
+        }
+
+        public async Task<IReadOnlyList<PlayerCharacter>> GetCharactersAsync(string sessionId)
+        {
+            var userId = this.GetPrimaryKeyString();
+            await _sessionRepository.EnsureUserSessionAsync(sessionId, userId);
+
+            return await _gachaHistoryRepository.GetCharactersAsync(userId);
+        }
+
+        private static Card DrawOne(GachaTable table, ref int pityPoint)
+        {
+            pityPoint++;
+
+            var isPity = pityPoint >= PityThreshold;
+            var rarity = isPity ? PityRarity : PickRarity(table.Probabilities);
 
             if (table.CardsByRarity.TryGetValue(rarity, out var pool) == false || pool.Count == 0)
                 throw new InvalidOperationException($"가챠 테이블 오류. Rarity={rarity}");
 
-            return Pick(pool);
+            var card = Pick(pool);
+            card.IsPity = isPity;
+
+            if (rarity == PityRarity)
+                pityPoint = 0;
+
+            card.PityPointAfter = pityPoint;
+
+            return card;
         }
 
         private static string PickRarity(IReadOnlyList<GachaProbabilityData> probabilities)

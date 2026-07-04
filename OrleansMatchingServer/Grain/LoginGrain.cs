@@ -1,5 +1,6 @@
 using Common;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 
 namespace OrleansMatchingServer
 {
@@ -25,65 +26,70 @@ namespace OrleansMatchingServer
             var createdTime = DateTimeOffset.UtcNow;
             var passwordHash = PasswordHasher.Hash(psw);
 
-            var created = await _userRepository.CreateUserAsync(userId, passwordHash, createdTime);
-            if (created == false)
+            try
             {
-                _logger.LogWarning(
-                    "등록 실패. UserId={UserId}",
-                    userId);
+                var created = await _userRepository.CreateUserAsync(userId, passwordHash, createdTime);
+                if (created == false)
+                {
+                    _logger.LogWarning("등록 실패. UserId={UserId}", userId);
+                    return false;
+                }
 
-                return false;
+                _logger.LogInformation(
+                    "등록 성공. UserId={UserId}, CreatedTime={CreatedTime}",
+                    userId,
+                    createdTime);
+
+                return true;
             }
-
-            _logger.LogInformation(
-                "등록 성공. UserId={UserId}, CreatedTime={CreatedTime}",
-                userId,
-                createdTime);
-
-            return true;
+            catch (NpgsqlException ex)
+            {
+                _logger.LogError(ex, "회원가입 중 데이터베이스 오류. UserId={UserId}", userId);
+                throw new InvalidOperationException("데이터베이스 연결에 실패했습니다. PostgreSQL 설정을 확인하세요.");
+            }
         }
 
         public async Task<string?> LoginAsync(string psw)
         {
             var userId = this.GetPrimaryKeyString();
-            var user = await _userRepository.GetUserAsync(userId);
 
-            if (user is null)
+            try
             {
-                _logger.LogWarning(
-                    "로그인 실패. UserId={UserId}",
-                    userId);
+                var user = await _userRepository.GetUserAsync(userId);
 
-                return null;
-            }
+                if (user is null)
+                {
+                    _logger.LogWarning("로그인 실패. UserId={UserId}", userId);
+                    return null;
+                }
 
-            var verification = PasswordHasher.Verify(psw, user.PasswordHash);
-            if (verification.Verified == false)
-            {
-                _logger.LogWarning(
-                    "비밀번호 오류. UserId={UserId}",
-                    user.UserId);
+                var verification = PasswordHasher.Verify(psw, user.PasswordHash);
+                if (verification.Verified == false)
+                {
+                    _logger.LogWarning("비밀번호 오류. UserId={UserId}", user.UserId);
+                    return null;
+                }
 
-                return null;
-            }
+                if (verification.NeedsRehash)
+                {
+                    await _userRepository.UpdatePasswordHashAsync(user.UserId, PasswordHasher.Hash(psw));
+                    _logger.LogInformation("비밀번호 해시 업그레이드. UserId={UserId}", user.UserId);
+                }
 
-            if (verification.NeedsRehash)
-            {
-                await _userRepository.UpdatePasswordHashAsync(user.UserId, PasswordHasher.Hash(psw));
+                var sessionId = await _sessionRepository.CreateSessionAsync(user.UserId, TimeSpan.FromHours(24));
 
                 _logger.LogInformation(
-                    "비밀번호 해시 업그레이드. UserId={UserId}",
-                    user.UserId);
+                    "로그인 성공. UserId={UserId}, SessionExpiresInHours={SessionExpiresInHours}",
+                    user.UserId,
+                    24);
+
+                return sessionId;
             }
-
-            var sessionId = await _sessionRepository.CreateSessionAsync(user.UserId, TimeSpan.FromHours(24));
-
-            _logger.LogInformation(
-                "로그인 성공. UserId={UserId}, SessionExpiresInHours={SessionExpiresInHours}",
-                user.UserId,
-                24);
-
-            return sessionId;
+            catch (NpgsqlException ex)
+            {
+                _logger.LogError(ex, "로그인 중 데이터베이스 오류. UserId={UserId}", userId);
+                throw new InvalidOperationException("데이터베이스 연결에 실패했습니다. PostgreSQL 설정을 확인하세요.");
+            }
         }
     }
 }

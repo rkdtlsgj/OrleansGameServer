@@ -5,6 +5,9 @@ using OrleansMatchingServer;
 
 public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
 {
+    //테스트용 매칭 대기시간
+    private static readonly TimeSpan MatchInterval = TimeSpan.FromMinutes(1);
+
     private readonly MatchHistoryRepository _historyRepository;
     private readonly QueueCacheRepository _queueCacheRepository;
     private readonly SessionRepository _sessionRepository;
@@ -14,9 +17,6 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
     private readonly Queue<string> _order = new();
 
     private IDisposable? _timer;
-
-    //테스트용 매칭 대기시간
-    private static readonly TimeSpan MatchInterval = TimeSpan.FromMinutes(1);
 
     public MatchingQueueGrain(
         MatchHistoryRepository historyRepository,
