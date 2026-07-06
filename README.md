@@ -21,7 +21,9 @@ https://blog.naver.com/rkdtlsgj/224298880418
 * Redis
 
 # 실행 방법
-
+<details>
+<summary>실행 사전 준비</summary>
+    
 ## 1. 사전 준비
 * .NET 10.0 SDK
 * 로컬 또는 원격 PostgreSQL 인스턴스
@@ -139,6 +141,7 @@ dotnet run
 ```
 
 클라이언트에서는 회원가입과 로그인 후 매칭, 가챠, 젬 충전 메뉴를 사용할 수 있습니다. 매칭은 같은 `dice` 채널에 2명 이상 접속하면 1분 주기 타이머를 통해 진행됩니다.
+</details>
 
 # 주요 기능
 로그인 / 회원가입
@@ -193,6 +196,15 @@ Redis에 채널별 대기 유저 확인<br><br>
 
 <img width="256" height="431" alt="image" src="https://github.com/user-attachments/assets/88e55fd8-cb69-4b68-8aba-83f9b7263ebc" />
 <img width="430" height="271" alt="image" src="https://github.com/user-attachments/assets/ee3c6c48-2522-4e75-aedd-f06833c17926" /><br>
+가챠 시스템 구현<br><br>
 
-가챠 시스템 구현
+User 200명 가챠 테스트<br>
+User당 10회뽑기 100회 요청<br>
+등급 / 획득수 / 실제비율 / 기대값 / 차이<br>
+<img width="320" height="57" alt="image" src="https://github.com/user-attachments/assets/99b03286-7905-4891-a287-8dd54a7b075b" /><br>
+천장이 보정되어서 가차확률에 차이는 있지만 거의 일치 확인<br>
+평균 요청 avgMs=87 maxMs=1116<br>
+maxMs 요청이 너무 오래걸려서 확인해본 결과 지갑 차감쪽에서 요청이 느리다는 걸 로그로 확인했고 수정 예정<br>
+
+
 </details>
