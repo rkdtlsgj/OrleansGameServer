@@ -13,6 +13,7 @@ namespace OrleansMatchingServer
         private readonly GachaHistoryRepository _gachaHistoryRepository;
         private readonly SessionRepository _sessionRepository;
         private readonly ILogger<GachaGrain> _logger;
+        private int? _pityPoint;
 
         public GachaGrain(
             GachaDataRepository gachaDataRepository,
@@ -50,7 +51,7 @@ namespace OrleansMatchingServer
                 throw new InvalidOperationException("재화가 부족합니다.");
             }
 
-            var pityPoint = await _gachaHistoryRepository.GetPityPointAsync(userId);
+            var pityPoint = await GetPityPointAsync(userId);
             var historyWritten = false;
 
             try
@@ -61,24 +62,23 @@ namespace OrleansMatchingServer
 
                 await _gachaHistoryRepository.SaveDrawAsync(userId, result, pityPoint);
                 historyWritten = true;
+                _pityPoint = pityPoint;
 
-                var wallet = await walletGrain.GetWalletAsync(sessionId);
-
-                _logger.LogInformation(
+                _logger.LogDebug(
                     "가챠 성공. UserId={UserId}, Count={Count}, Cost={Cost}, PityPoint={PityPoint}, PaidGem={PaidGem}, FreeGem={FreeGem}",
                     userId,
                     count,
                     totalCost,
                     pityPoint,
-                    wallet.PaidGem,
-                    wallet.FreeGem);
+                    spendResult.PaidGem,
+                    spendResult.FreeGem);
 
                 return new GachaResult
                 {
                     Cards = result,
                     PityPoint = pityPoint,
-                    PaidGem = wallet.PaidGem,
-                    FreeGem = wallet.FreeGem
+                    PaidGem = spendResult.PaidGem,
+                    FreeGem = spendResult.FreeGem
                 };
             }
             catch
@@ -97,7 +97,7 @@ namespace OrleansMatchingServer
 
             return new GachaState
             {
-                PityPoint = await _gachaHistoryRepository.GetPityPointAsync(userId)
+                PityPoint = await GetPityPointAsync(userId)
             };
         }
 
@@ -165,6 +165,15 @@ namespace OrleansMatchingServer
                 Rarity = card.Rarity,
                 ObtaiendAt = DateTimeOffset.UtcNow
             };
+        }
+
+        private async Task<int> GetPityPointAsync(string userId)
+        {
+            if (_pityPoint.HasValue)
+                return _pityPoint.Value;
+
+            _pityPoint = await _gachaHistoryRepository.GetPityPointAsync(userId);
+            return _pityPoint.Value;
         }
     }
 }

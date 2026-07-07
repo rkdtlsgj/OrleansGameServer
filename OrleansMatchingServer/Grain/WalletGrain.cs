@@ -33,7 +33,7 @@ namespace OrleansMatchingServer
             await _walletRepository.AddGemAsync(userId, paidGem, freeGem);
             var wallet = await _walletRepository.GetWalletAsync(userId);
 
-            _logger.LogInformation(
+            _logger.LogDebug(
                 "재화 추가. UserId={UserId}, PaidGemAdded={PaidGemAdded}, FreeGemAdded={FreeGemAdded}, PaidGem={PaidGem}, FreeGem={FreeGem}",
                 userId,
                 paidGem,
@@ -58,7 +58,6 @@ namespace OrleansMatchingServer
 
             var userId = this.GetPrimaryKeyString();
             var result = await _walletRepository.SpendGemAsync(userId, amount);
-            var wallet = await _walletRepository.GetWalletAsync(userId);
 
             if (result.Success == false)
             {
@@ -66,20 +65,20 @@ namespace OrleansMatchingServer
                     "재화 부족. UserId={UserId}, Amount={Amount}, PaidGem={PaidGem}, FreeGem={FreeGem}",
                     userId,
                     amount,
-                    wallet.PaidGem,
-                    wallet.FreeGem);
+                    result.PaidGem,
+                    result.FreeGem);
 
                 return result;
             }
 
-            _logger.LogInformation(
+            _logger.LogDebug(
                 "재화 사용. UserId={UserId}, Amount={Amount}, FreeGemUsed={FreeGemUsed}, PaidGemUsed={PaidGemUsed}, PaidGem={PaidGem}, FreeGem={FreeGem}",
                 userId,
                 amount,
                 result.FreeGemUsed,
                 result.PaidGemUsed,
-                wallet.PaidGem,
-                wallet.FreeGem);
+                result.PaidGem,
+                result.FreeGem);
 
             return result;
         }

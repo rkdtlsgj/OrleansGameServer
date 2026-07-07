@@ -1,6 +1,7 @@
 using Common;
 using Dapper;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace OrleansMatchingServer;
 
@@ -27,9 +28,13 @@ public class GachaHistoryRepository
 
     public async Task SaveDrawAsync(string userId, IReadOnlyList<Card> cards, int pityPoint)
     {
+        if (cards.Count == 0)
+            return;
+
         await using var conn = new NpgsqlConnection(_connectionString);
         await conn.OpenAsync();
         await using var tx = await conn.BeginTransactionAsync();
+        var updatedAt = DateTimeOffset.UtcNow;
 
         const string upsertStateSql = """
             insert into gacha_user_state(user_id, pity_point, updated_at)
@@ -43,11 +48,12 @@ public class GachaHistoryRepository
         {
             UserId = userId,
             PityPoint = pityPoint,
-            UpdatedAt = DateTimeOffset.UtcNow
+            UpdatedAt = updatedAt
         }, tx);
 
-        const string insertHistorySql = """
-            insert into gacha_history(
+        await using (var writer = await conn.BeginBinaryImportAsync(
+            """
+            copy gacha_history(
                 draw_id,
                 user_id,
                 card_id,
@@ -56,28 +62,24 @@ public class GachaHistoryRepository
                 obtained_at,
                 pity_point_after,
                 is_pity)
-            values (
-                @DrawId,
-                @UserId,
-                @CardId,
-                @Name,
-                @Rarity,
-                @ObtainedAt,
-                @PityPointAfter,
-                @IsPity);
-            """;
-
-        await conn.ExecuteAsync(insertHistorySql, cards.Select(card => new
+            from stdin (format binary)
+            """))
         {
-            DrawId = Guid.NewGuid(),
-            UserId = userId,
-            card.CardId,
-            card.Name,
-            card.Rarity,
-            ObtainedAt = card.ObtaiendAt,
-            PityPointAfter = card.PityPointAfter,
-            card.IsPity
-        }), tx);
+            foreach (var card in cards)
+            {
+                await writer.StartRowAsync();
+                await writer.WriteAsync(Guid.NewGuid(), NpgsqlDbType.Uuid);
+                await writer.WriteAsync(userId, NpgsqlDbType.Text);
+                await writer.WriteAsync(card.CardId, NpgsqlDbType.Text);
+                await writer.WriteAsync(card.Name, NpgsqlDbType.Text);
+                await writer.WriteAsync(card.Rarity, NpgsqlDbType.Text);
+                await writer.WriteAsync(card.ObtaiendAt, NpgsqlDbType.TimestampTz);
+                await writer.WriteAsync(card.PityPointAfter, NpgsqlDbType.Integer);
+                await writer.WriteAsync(card.IsPity, NpgsqlDbType.Boolean);
+            }
+
+            await writer.CompleteAsync();
+        }
 
         const string upsertCharacterSql = """
             insert into player_character(
@@ -88,29 +90,62 @@ public class GachaHistoryRepository
                 count,
                 first_obtained_at,
                 last_obtained_at)
-            values (
+            select
                 @UserId,
-                @CardId,
-                @Name,
-                @Rarity,
-                1,
-                @ObtainedAt,
-                @ObtainedAt)
+                card_id,
+                name,
+                rarity,
+                count,
+                first_obtained_at,
+                last_obtained_at
+            from unnest(
+                @CardIds::text[],
+                @Names::text[],
+                @Rarities::text[],
+                @Counts::integer[],
+                @FirstObtainedAts::timestamptz[],
+                @LastObtainedAts::timestamptz[])
+            as item(
+                card_id,
+                name,
+                rarity,
+                count,
+                first_obtained_at,
+                last_obtained_at)
             on conflict (user_id, card_id) do update
-            set count = player_character.count + 1,
+            set count = player_character.count + excluded.count,
                 name = excluded.name,
                 rarity = excluded.rarity,
                 last_obtained_at = excluded.last_obtained_at;
             """;
 
-        await conn.ExecuteAsync(upsertCharacterSql, cards.Select(card => new
+        var characterRows = cards
+            .GroupBy(card => card.CardId)
+            .Select(group =>
+            {
+                var first = group.First();
+                return new
+                {
+                    CardId = group.Key,
+                    first.Name,
+                    first.Rarity,
+                    Count = group.Count(),
+                    FirstObtainedAt = group.Min(card => card.ObtaiendAt),
+                    LastObtainedAt = group.Max(card => card.ObtaiendAt)
+                };
+            })
+            .ToArray();
+
+        await conn.ExecuteAsync(upsertCharacterSql, new
         {
             UserId = userId,
-            card.CardId,
-            card.Name,
-            card.Rarity,
-            ObtainedAt = card.ObtaiendAt
-        }), tx);
+            CardIds = characterRows.Select(row => row.CardId).ToArray(),
+            Names = characterRows.Select(row => row.Name).ToArray(),
+            Rarities = characterRows.Select(row => row.Rarity).ToArray(),
+            Counts = characterRows.Select(row => row.Count).ToArray(),
+            FirstObtainedAts = characterRows.Select(row => row.FirstObtainedAt).ToArray(),
+            LastObtainedAts = characterRows.Select(row => row.LastObtainedAt).ToArray()
+        }, tx);
 
         await tx.CommitAsync();
     }

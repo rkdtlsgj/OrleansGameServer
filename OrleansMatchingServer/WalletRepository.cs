@@ -81,11 +81,18 @@ public class WalletRepository
         if (total < amount)
         {
             await tx.RollbackAsync();
-            return new SpendGemResult { Success = false };
+            return new SpendGemResult
+            {
+                Success = false,
+                PaidGem = wallet.PaidGem,
+                FreeGem = wallet.FreeGem
+            };
         }
 
         var freeUsed = Math.Min(wallet.FreeGem, amount);
         var paidUsed = amount - freeUsed;
+        var paidGemAfter = wallet.PaidGem - paidUsed;
+        var freeGemAfter = wallet.FreeGem - freeUsed;
 
         const string updateSql = """
             update player_wallet
@@ -109,7 +116,9 @@ public class WalletRepository
         {
             Success = true,
             PaidGemUsed = paidUsed,
-            FreeGemUsed = freeUsed
+            FreeGemUsed = freeUsed,
+            PaidGem = paidGemAfter,
+            FreeGem = freeGemAfter
         };
     }
 }

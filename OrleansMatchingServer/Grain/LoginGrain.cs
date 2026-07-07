@@ -45,7 +45,7 @@ namespace OrleansMatchingServer
             catch (NpgsqlException ex)
             {
                 _logger.LogError(ex, "회원가입 중 데이터베이스 오류. UserId={UserId}", userId);
-                throw new InvalidOperationException("데이터베이스 연결에 실패했습니다. PostgreSQL 설정을 확인하세요.");
+                throw new InvalidOperationException("데이터베이스 연결에 실패했습니다. 설정을 확인하세요.");
             }
         }
 
@@ -88,7 +88,7 @@ namespace OrleansMatchingServer
             catch (NpgsqlException ex)
             {
                 _logger.LogError(ex, "로그인 중 데이터베이스 오류. UserId={UserId}", userId);
-                throw new InvalidOperationException("데이터베이스 연결에 실패했습니다. PostgreSQL 설정을 확인하세요.");
+                throw new InvalidOperationException("데이터베이스 연결에 실패했습니다. 설정을 확인하세요.");
             }
         }
     }

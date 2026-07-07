@@ -20,6 +20,8 @@ namespace Common
         [Id(0)] public bool Success { get; set; }
         [Id(1)] public int PaidGemUsed { get; set; }
         [Id(2)] public int FreeGemUsed { get; set; }
+        [Id(3)] public int PaidGem { get; set; }
+        [Id(4)] public int FreeGem { get; set; }
     }
 
     [GenerateSerializer]
