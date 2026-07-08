@@ -36,9 +36,19 @@ namespace OrleansMatchingServer
             await _sessionRepository.EnsureUserSessionAsync(sessionId, userId);
 
             var table = await _gachaDataRepository.GetTableAsync();
-            var walletGrain = GrainFactory.GetGrain<IWalletGrain>(userId);
             var totalCost = Cost * count;
-            var spendResult = await walletGrain.SpendGemAsync(sessionId, totalCost);
+            var pityPoint = await GetPityPointAsync(userId);
+
+            var result = new List<Card>();
+            for (var i = 0; i < count; i++)
+                result.Add(DrawOne(table, ref pityPoint));
+
+            // 재화 차감과 결과 저장이 한 트랜잭션이라 중간에 실패해도 재화가 유실되지 않기위함.
+            var spendResult = await _gachaHistoryRepository.SpendAndSaveDrawAsync(
+                userId,
+                totalCost,
+                result,
+                pityPoint);
 
             if (spendResult.Success == false)
             {
@@ -51,43 +61,24 @@ namespace OrleansMatchingServer
                 throw new InvalidOperationException("재화가 부족합니다.");
             }
 
-            var pityPoint = await GetPityPointAsync(userId);
-            var historyWritten = false;
+            _pityPoint = pityPoint;
 
-            try
+            _logger.LogDebug(
+                "가챠 성공. UserId={UserId}, Count={Count}, Cost={Cost}, PityPoint={PityPoint}, PaidGem={PaidGem}, FreeGem={FreeGem}",
+                userId,
+                count,
+                totalCost,
+                pityPoint,
+                spendResult.PaidGem,
+                spendResult.FreeGem);
+
+            return new GachaResult
             {
-                var result = new List<Card>();
-                for (var i = 0; i < count; i++)
-                    result.Add(DrawOne(table, ref pityPoint));
-
-                await _gachaHistoryRepository.SaveDrawAsync(userId, result, pityPoint);
-                historyWritten = true;
-                _pityPoint = pityPoint;
-
-                _logger.LogDebug(
-                    "가챠 성공. UserId={UserId}, Count={Count}, Cost={Cost}, PityPoint={PityPoint}, PaidGem={PaidGem}, FreeGem={FreeGem}",
-                    userId,
-                    count,
-                    totalCost,
-                    pityPoint,
-                    spendResult.PaidGem,
-                    spendResult.FreeGem);
-
-                return new GachaResult
-                {
-                    Cards = result,
-                    PityPoint = pityPoint,
-                    PaidGem = spendResult.PaidGem,
-                    FreeGem = spendResult.FreeGem
-                };
-            }
-            catch
-            {
-                if (historyWritten == false)
-                    await walletGrain.AddGemAsync(sessionId, spendResult.PaidGemUsed, spendResult.FreeGemUsed);
-
-                throw;
-            }
+                Cards = result,
+                PityPoint = pityPoint,
+                PaidGem = spendResult.PaidGem,
+                FreeGem = spendResult.FreeGem
+            };
         }
 
         public async Task<GachaState> GetPityInfoAsync(string sessionId)

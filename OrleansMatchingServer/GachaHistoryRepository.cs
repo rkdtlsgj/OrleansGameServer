@@ -8,10 +8,12 @@ namespace OrleansMatchingServer;
 public class GachaHistoryRepository
 {
     private readonly string _connectionString;
+    private readonly WalletRepository _walletRepository;
 
-    public GachaHistoryRepository(string connectionString)
+    public GachaHistoryRepository(string connectionString, WalletRepository walletRepository)
     {
         _connectionString = connectionString;
+        _walletRepository = walletRepository;
     }
 
     public async Task<int> GetPityPointAsync(string userId)
@@ -26,14 +28,40 @@ public class GachaHistoryRepository
         return await conn.QuerySingleOrDefaultAsync<int?>(sql, new { UserId = userId }) ?? 0;
     }
 
-    public async Task SaveDrawAsync(string userId, IReadOnlyList<Card> cards, int pityPoint)
+    /// <summary>
+    /// 재화 차감과 가챠 결과 저장을 하나의 트랜잭션으로 처리한다.
+    /// 재화가 부족하면 아무것도 기록하지 않고 실패 결과를 돌려준다.
+    /// </summary>
+    public async Task<SpendGemResult> SpendAndSaveDrawAsync(
+        string userId,
+        int amount,
+        IReadOnlyList<Card> cards,
+        int pityPoint)
     {
-        if (cards.Count == 0)
-            return;
-
         await using var conn = new NpgsqlConnection(_connectionString);
         await conn.OpenAsync();
         await using var tx = await conn.BeginTransactionAsync();
+
+        var spendResult = await _walletRepository.SpendGemAsync(conn, tx, userId, amount);
+        if (spendResult.Success == false)
+        {
+            await tx.RollbackAsync();
+            return spendResult;
+        }
+
+        await SaveDrawAsync(conn, tx, userId, cards, pityPoint);
+        await tx.CommitAsync();
+
+        return spendResult;
+    }
+
+    private static async Task SaveDrawAsync(
+        NpgsqlConnection conn,
+        NpgsqlTransaction tx,
+        string userId,
+        IReadOnlyList<Card> cards,
+        int pityPoint)
+    {
         var updatedAt = DateTimeOffset.UtcNow;
 
         const string upsertStateSql = """
@@ -146,8 +174,6 @@ public class GachaHistoryRepository
             FirstObtainedAts = characterRows.Select(row => row.FirstObtainedAt).ToArray(),
             LastObtainedAts = characterRows.Select(row => row.LastObtainedAt).ToArray()
         }, tx);
-
-        await tx.CommitAsync();
     }
 
     public async Task<IReadOnlyList<GachaHistoryItem>> GetHistoryAsync(string userId, int limit)

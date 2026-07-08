@@ -23,7 +23,9 @@ await Host.CreateDefaultBuilder(args)
             postgres,
             sp.GetRequiredService<ILogger<GachaDataRepository>>()));
         services.AddSingleton(_ => new WalletRepository(postgres));
-        services.AddSingleton(_ => new GachaHistoryRepository(postgres));
+        services.AddSingleton(sp => new GachaHistoryRepository(
+            postgres,
+            sp.GetRequiredService<WalletRepository>()));
         services.AddSingleton(_ => new UserRepository(postgres));
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redis));
 

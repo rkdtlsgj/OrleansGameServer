@@ -55,6 +55,21 @@ public class WalletRepository
         await conn.OpenAsync();
         await using var tx = await conn.BeginTransactionAsync();
 
+        var result = await SpendGemAsync(conn, tx, userId, amount);
+        if (result.Success)
+            await tx.CommitAsync();
+        else
+            await tx.RollbackAsync();
+
+        return result;
+    }
+
+    public async Task<SpendGemResult> SpendGemAsync(
+        NpgsqlConnection conn,
+        NpgsqlTransaction tx,
+        string userId,
+        int amount)
+    {
         const string ensureSql = """
             insert into player_wallet(user_id, paid_gem, free_gem, updated_at)
             values (@UserId, 0, 0, @UpdatedAt)
@@ -80,7 +95,6 @@ public class WalletRepository
         var total = wallet.PaidGem + wallet.FreeGem;
         if (total < amount)
         {
-            await tx.RollbackAsync();
             return new SpendGemResult
             {
                 Success = false,
@@ -109,8 +123,6 @@ public class WalletRepository
             FreeGemUsed = freeUsed,
             UpdatedAt = DateTimeOffset.UtcNow
         }, tx);
-
-        await tx.CommitAsync();
 
         return new SpendGemResult
         {
