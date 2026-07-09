@@ -14,7 +14,7 @@
 
 ---
 
-## 목차 (Table of Contents)
+## 목차
 
 | # | 챕터 | 내용 |
 |:---:|------|------|
@@ -40,7 +40,7 @@ Orleans Silo ──────────────────────�
     ┌────┴─────┐
     ▼          ▼
 PostgreSQL    Redis
-영속 (COPY  batch upsert)    세션 · 매칭 대기열 캐시
+DB (COPY  batch upsert)    세션 · 매칭 대기열 캐시
 ```
 
 ### 기술 스택
@@ -56,10 +56,10 @@ PostgreSQL    Redis
 
 | 항목 | 내용 |
 |------|------|
-| **재화 유실 차단** | 재화 차감과 뽑기 결과 저장을 하나의 DB 트랜잭션으로 통합 <br>부분 실패 시 재화만 차감되는 유실 시나리오를 구조적으로 제거 |
+| **재화 유실 차단**  | 재화 차감과 뽑기 결과 저장을 하나의 DB 트랜잭션으로 통합 <br>부분 실패 시 재화만 차감되는 유실 시나리오를 구조적으로 제거 |
 | **천장 시스템** | 90연차 SSR 확정 로직 + 임계값 상수 분리로 기획 데이터 변경에 유연한 구조 |
-| **이력 기록 최적화** | 가챠 이력 N건을 PostgreSQL COPY(binary import)로, 보유 캐릭터를 `unnest` 기반 batch upsert로 단일 라운드트립 기록 |
-| **매칭 파이프라인** | 채널 단위 Grain 대기열 → GrainTimer 주기 매칭 → Observer 비동기 통지 → 이력 기록 |
+| **이력 기록 최적화**    | 가챠 이력 N건을 PostgreSQL COPY(binary import)로, 보유 캐릭터를 `unnest` 기반 batch upsert로 단일 라운드트립 기록 |
+| **매칭 파이프라인**  | 채널 단위 Grain 대기열 → GrainTimer 주기 매칭 → Observer 비동기 통지 → 이력 기록 |
 
 ---
 
@@ -75,7 +75,7 @@ Orleans Grain은 한 번에 하나의 요청만 실행하므로 락 없이 상�
 | **타이머 인터리빙** | 매칭 타이머를 `Interleave = false`로 등록해 콜백도 일반 턴처럼 직렬화 <br> `Enqueue`/`Cancel`과 대기열 상태가 교차 실행되지 않음 |
 | **`[Reentrant]` <br> 미사용** | 재진입을 허용하면 검사-후-행동(TOCTOU) 사이에 상태가 바뀔 수 있어, 기본값인 비-재진입을 유지 <br> 상태를 바꾸지 않는 조회 로그성 Grain에만 허용 가능하다고 판단|
 | **`ConfigureAwait(false)` <br> 미사용** | 턴 기반 보장은 Grain 전용 TaskScheduler가 제공 — `ConfigureAwait(false)`를 쓰면 await 이후 스레드 풀로 벗어나 싱글스레드 보장이 깨지므로 Grain 내부에서는 사용하지 않음 |
-| **Timer vs Reminder** | 대기열은 활성화 기간에만 의미 있는 메모리 상태이므로 영속 Reminder 대신 silo-local GrainTimer 선택<br>`KeepAlive = true`로 유휴 비활성화 방지 |
+| **Timer vs Reminder** | 대기열은 활성화 기간에만 의미 있는 메모리 상태이므로 Reminder 대신 silo-local GrainTimer 선택<br>`KeepAlive = true`로 유휴 비활성화 방지 |
 | **Grain 생명주기** | `GetGrain`은 참조만 반환하고 실제 활성화(생성자  `OnActivateAsync`)는 첫 호출 시점에 일어남을 직접 테스트로 확인 <br> 유휴 시 비활성화됐다가 다음 호출에 재활성화되므로, 대기열 Grain에 `KeepAlive = true`를 준 근거 |
 
 ### 단일 트랜잭션 — 가챠 차감·저장 통합
