@@ -1,9 +1,11 @@
 # 데이터베이스 구조
 
-PostgreSQL은 유저, 재화, 가챠 기록<br>
-Redis는 세션, 매칭 대기열을 담당합니다.
+* **PostgreSQL** — 계정, 매칭 이력, 재화, 가챠 기록 (영속 데이터)
+* **Redis** — 세션, 매칭 대기열 (캐시 / 만료 데이터)
 
-## PostgreSQL 테이블
+[← README로 돌아가기](../README.md)
+
+## 🗄️ PostgreSQL 테이블
 
 | 테이블 | 용도 | 사용하는 곳 |
 |---|---|---|
@@ -16,6 +18,10 @@ Redis는 세션, 매칭 대기열을 담당합니다.
 | `gacha_history` | 뽑기 1회당 1행의 가챠 이력 | GachaHistoryRepository |
 | `player_character` | 유저별 보유 캐릭터 (중복 획득 시 count 증가) | GachaHistoryRepository |
 
+### ERD
+
+```mermaid
+erDiagram
     user_info {
         text user_id PK
         text password_hash
@@ -75,14 +81,21 @@ Redis는 세션, 매칭 대기열을 담당합니다.
         timestamptz last_obtained_at
     }
 
+    user_info ||--o| player_wallet : "재화 보유"
+    user_info ||--o| gacha_user_state : "천장 포인트"
+    user_info ||--o{ gacha_history : "뽑기 이력"
+    user_info ||--o{ player_character : "캐릭터 보유"
+    character_info ||--o{ gacha_history : "뽑힌 캐릭터"
+    character_info ||--o{ player_character : "보유 캐릭터"
+```
 
-## 데이터 흐름
+## 🔄 데이터 흐름
 
 * 가챠 뽑기 1번에 `player_wallet` 차감 → `gacha_user_state` 갱신 → `gacha_history` 기록(COPY) → `player_character` upsert가 **하나의 트랜잭션**으로 처리됩니다.
-* `gacha_history`는 뽑기 1회당 1행씩 계속 쌓이는 이력 테이블이고, `player_character`는 유저-캐릭터당 1행을 유지하며 `count`만 증가하는 집계 테이블입니다.
-* `character_info`와 `gacha_probability`는 서버가 읽기만 하는 데이터입니다.
+* `gacha_history`는 뽑기 1회당 1행씩 계속 쌓이는 **이력 테이블**이고, `player_character`는 유저-캐릭터당 1행을 유지하며 `count`만 증가하는 **집계 테이블**입니다.
+* `character_info`와 `gacha_probability`는 서버가 **읽기만** 하는 마스터 데이터입니다.
 
-## Redis 키
+## ⚡ Redis 키
 
 | 키 | 타입 | 용도 |
 |---|---|---|

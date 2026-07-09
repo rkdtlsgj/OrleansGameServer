@@ -1,34 +1,47 @@
 # 주요 기능
 
-## 로그인 / 회원가입
-* 유저 ID를 Grain key로 사용합니다.
-* 회원가입 시 비밀번호 해시와 생성 시간을 DB에 저장합니다.
+각 기능은 독립된 Grain으로 구현되어 있으며, Grain key 선택 기준과 저장소 사용 방식을 함께 정리했습니다.
+
+[← README로 돌아가기](../README.md)
+
+## 🔐 로그인 / 회원가입
+
+> Grain key: **유저 ID** — [LoginGrain.cs](../OrleansMatchingServer/Grain/LoginGrain.cs)
+
+* 회원가입 시 비밀번호 해시와 생성 시간을 PostgreSQL `user_info`에 저장합니다.
 * 로그인 시 DB에서 유저 정보를 조회하고 비밀번호를 검증합니다.
-* 로그인 성공 시 Redis에 24시간 유효한 세션을 저장합니다.
+* 로그인 성공 시 Redis에 **24시간 유효한 세션**을 저장하고 세션 ID를 반환합니다.
 
-## 매칭
-* 채널 이름을 Grain key로 사용합니다.
+## ⚔️ 매칭
+
+> Grain key: **채널 이름** — [MatchingQueueGrain.cs](../OrleansMatchingServer/Grain/MatchingQueueGrain.cs) · [MatchingGrain.cs](../OrleansMatchingServer/Grain/MatchingGrain.cs)
+
 * 현재 클라이언트는 `dice` 채널에 입장합니다.
-* 같은 채널에서 대기 중인 유저를 주기적으로 2명씩 매칭합니다.
-* 매칭 성공 시 양쪽 클라이언트에 Observer로 결과를 알립니다.
-* Redis에는 채널별 대기 유저와 유저별 현재 채널을 캐싱합니다.
-* PostgreSQL에는 매칭 완료 기록을 저장합니다.
+* 같은 채널에서 대기 중인 유저를 타이머로 주기적으로 **2명씩 매칭**합니다.
+* 매칭 성공 시 양쪽 클라이언트에 **Observer**로 결과를 알립니다.
+* Redis에 채널별 대기 유저 목록과 유저별 현재 채널을 캐싱합니다.
+* PostgreSQL `match_history`에 매칭 완료 기록을 저장합니다.
 
-## 지갑
-* 유저 ID를 Grain key로 사용합니다.
-* 유료젬과 무료젬을 관리합니다.
-* 재화는 PostgreSQL의 `player_wallet` 테이블에 저장합니다.
-* 재화 사용 시 무료젬을 먼저 차감하고, 부족한 분량을 유료젬에서 차감합니다.
+## 💰 지갑
 
-## 가챠
-* 유저 ID를 Grain key로 사용합니다.
+> Grain key: **유저 ID** — [WalletGrain.cs](../OrleansMatchingServer/Grain/WalletGrain.cs)
+
+* 유료젬과 무료젬을 구분해 관리합니다.
+* 재화는 PostgreSQL `player_wallet` 테이블에 저장합니다.
+* 재화 사용 시 **무료젬을 먼저 차감**하고, 부족한 분량을 유료젬에서 차감합니다.
+
+## 🎰 가챠
+
+> Grain key: **유저 ID** — [GachaGrain.cs](../OrleansMatchingServer/Grain/GachaGrain.cs)
+
 * 1회 뽑기와 10회 뽑기를 지원합니다.
-* 재화 차감과 뽑기 결과 저장을 하나의 DB 트랜잭션으로 처리해, 중간에 실패해도 재화가 유실되지 않습니다.
-* 90회째 SSR 천장을 지원하고, SSR 획득 시 천장 포인트를 초기화합니다.
-* 가챠 이력은 `gacha_history`에 저장합니다.
-* 보유 캐릭터는 `player_character`에 저장하고, 중복 획득 시 count를 증가시킵니다.
+* 재화 차감과 뽑기 결과 저장을 **하나의 DB 트랜잭션**으로 처리해, 중간에 실패해도 재화가 유실되지 않습니다.
+* **90회째 SSR 천장**을 지원하고, SSR 획득 시 천장 포인트를 초기화합니다.
+* `character_info` 테이블에서 캐릭터 마스터 데이터를, `gacha_probability`에서 등급별 확률을 조회합니다.
+* 가챠 이력은 `gacha_history`에 뽑기 1회당 1행씩 저장합니다.
+* 보유 캐릭터는 `player_character`에 저장하고, 중복 획득 시 `count`를 증가시킵니다.
 * 뽑기 결과와 남은 재화를 클라이언트에 반환합니다.
-* `character_info` 테이블을 이용해 캐릭터 정보를 조회합니다.
 
-## 로그
-* ILogger를 이용하여 주요 서버 이벤트를 기록합니다.
+## 📋 로그
+
+* `ILogger`를 이용해 주요 서버 이벤트를 기록합니다.
