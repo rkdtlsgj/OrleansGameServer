@@ -45,40 +45,40 @@ timer.Stop();<br>
 
 ### 병목 분석
 
-| 구간 | 소요 시간 |
-|---|---| 
-200명
-| 요청 전체 평균 | avgMs = 60 |
-| 재화 차감 (SpendGem) | 15ms |
-| 천장 조회 (GetPity) | 5ms |
-| 뽑기 결과 저장 (SaveDraw) | 138ms |
+200명<br>
+
+| 요청 전체 평균 | avgMs = 60 |<br>
+| 재화 차감 (SpendGem) | 15ms |<br>
+| 천장 조회 (GetPity) | 5ms |<br>
+| 뽑기 결과 저장 (SaveDraw) | 138ms |<br>
 
 구간별 측정 결과 **대부분의 시간이 DB 저장 작업(SaveDraw)에서 소요**되는 것을 확인했습니다.
 
 개선 이후 실제 환경과 비슷하게 가챠 이후 1000ms~2000ms 텀을 준 후 실행하게 했습니다.
 
-200명
-| 요청 전체 평균 | avgMs = 6.2ms |
-| 재화 차감 (SpendGem) | 0.7ms |
-| 천장 조회 (GetPity) | 2.4ms |
-| 뽑기 결과 저장 (SaveDraw) | 1.5ms |
-| CPU 사용률 | 7% | 소요시간 02:38 |
+200명<br>
+| 요청 전체 평균 | avgMs = 6.2ms |<br>
+| 재화 차감 (SpendGem) | 0.7ms |<br>
+| 천장 조회 (GetPity) | 2.4ms |<br>
+| 뽑기 결과 저장 (SaveDraw) | 1.5ms |<br>
+| CPU 사용률 | 7% | 소요시간 02:38 |<br><br>
 
-1000명
-| 요청 전체 평균 | avgMs = 5.9ms |
-| 재화 차감 (SpendGem) | 0.8ms |
-| 천장 조회 (GetPity) | 0.3ms |
-| 뽑기 결과 저장 (SaveDraw) | 2.1ms |
-| CPU 사용률 | 17% | 소요시간 02:42 |
+1000명<br>
+| 요청 전체 평균 | avgMs = 5.9ms |<br>
+| 재화 차감 (SpendGem) | 0.8ms |<br>
+| 천장 조회 (GetPity) | 0.3ms |<br>
+| 뽑기 결과 저장 (SaveDraw) | 2.1ms |<br>
+| CPU 사용률 | 17% | 소요시간 02:42 |<br><br>
 
-5000명
-| 요청 전체 평균 | avgMs = 96.2ms |
-| 재화 차감 (SpendGem) | 3.5ms |
-| 천장 조회 (GetPity) | 1.8ms |
-| 뽑기 결과 저장 (SaveDraw) | 12.3ms |
-| CPU 사용률 | 23% | 소요시간 02:49 |
+5000명<br>
+| 요청 전체 평균 | avgMs = 96.2ms |<br>
+| 재화 차감 (SpendGem) | 3.5ms |<br>
+| 천장 조회 (GetPity) | 1.8ms |<br>
+| 뽑기 결과 저장 (SaveDraw) | 12.3ms |<br>
+| CPU 사용률 | 23% | 소요시간 02:49 |<br><br>
 
-수많은 인원이 동시에 진행하기 때문에 CPU 사용률이 사람이 많을 수록 올라간다.
+수많은 인원이 동시에 진행하기 때문에 CPU 사용률이 사람이 많을 수록 올라간다.<br>
+5000명 이상의 경우 점점 느려지는 것으로 확인 체크 필요<br>
 
 ### 개선 사항
 
