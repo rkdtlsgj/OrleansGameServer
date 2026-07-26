@@ -1,16 +1,38 @@
+using System.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans.Hosting;
 using OrleansMatchingServer;
+using Orleans.Runtime;
 using StackExchange.Redis;
 
 
 await Host.CreateDefaultBuilder(args)
-    .UseOrleans(silo => silo.UseLocalhostClustering()
-    .AddMemoryGrainStorage("matchStore"))
+    .UseContentRoot(AppContext.BaseDirectory)
+    .UseOrleans((context, silo)=>
+    {
+        var siloPort = context.Configuration.GetValue("SiloPort", 11111);
+        var gatewayPort = context.Configuration.GetValue("GatewayPort", 30000);
+        var primaryPort = context.Configuration.GetValue("PrimaryPort", 11111);
 
+        silo.UseLocalhostClustering(
+            siloPort: siloPort,
+            gatewayPort: gatewayPort,
+            primarySiloEndpoint: new IPEndPoint(IPAddress.Loopback, primaryPort))
+        .AddMemoryGrainStorage("matchStore")
+        .Configure<Orleans.Configuration.ActivationCountBasedPlacementOptions>(options =>
+            options.ChooseOutOf = 2)
+        .Configure<Orleans.Configuration.ClusterOptions>(options =>
+        {
+            options.ClusterId = "dev";
+            options.ServiceId = "dev";
+        });
+
+        silo.Services.AddSingleton<PlacementStrategy, ActivationCountBasedPlacement>();
+
+    })        
     .ConfigureServices((context, services) =>
     {
         var postgres = GetRequiredConnectionString(context.Configuration, "Postgres");

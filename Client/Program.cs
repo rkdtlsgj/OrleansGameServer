@@ -1,14 +1,39 @@
 using Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Orleans.Configuration;
 using Orleans.Hosting;
+using System.Net;
+using Microsoft.Extensions.Configuration;
 
 var host = Host.CreateDefaultBuilder(args)
-    .UseOrleansClient(client => client.UseLocalhostClustering())
+    .UseOrleansClient(client =>
+    {
+        client.UseStaticClustering(
+            new System.Net.IPEndPoint(IPAddress.Loopback, 30000),
+            new System.Net.IPEndPoint(IPAddress.Loopback, 30001));
+
+        client.Configure<ClusterOptions>(options =>
+        {
+            options.ClusterId = "dev";
+            options.ServiceId = "dev";
+        });
+    })
     .Build();
 
 await host.StartAsync();
 var client = host.Services.GetRequiredService<IClusterClient>();
+
+var config = host.Services.GetRequiredService<IConfiguration>();
+if (config.GetValue("placement", false))
+{
+    var probeCount = config.GetValue("count", 1000);
+    var probeTag = config.GetValue("tag", DateTime.Now.ToString("HHmmss"));
+
+    await RunPlacementProbeAsync(client, probeCount, probeTag);
+    await host.StopAsync();
+    return;
+}
 
 string? sessionId = null;
 string? loggedInUser = null;
@@ -201,4 +226,23 @@ async Task RunGachaMenu(IClusterClient clusterClient, string sessionId, string u
             Console.WriteLine($"\n{ex.Message}\n");
         }
     }
+}
+
+async Task RunPlacementProbeAsync(IClusterClient clusterClient, int count, string tag)
+{
+    var tally = new Dictionary<string, int>();
+
+    Console.WriteLine($"프로브 시작: tag={tag}, count={count}");
+
+    for (var i = 0; i < count; i++)
+    {
+        var probe = clusterClient.GetGrain<IPlacementProbeGrain>($"{tag}-{i}");
+        var silo = await probe.WhereAmIAsync();
+        tally[silo] = tally.GetValueOrDefault(silo) + 1;
+    }
+
+    Console.WriteLine($"\n=== 배치 분포 (tag={tag}, {count}개) ===");
+    foreach (var (silo, n) in tally.OrderBy(pair => pair.Key))
+        Console.WriteLine($"  {silo}  {n,5}개  ({n * 100.0 / count,5:F1}%)");
+    Console.WriteLine();
 }

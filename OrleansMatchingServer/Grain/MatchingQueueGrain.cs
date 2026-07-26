@@ -1,12 +1,16 @@
 using Common;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Orleans;
+using Orleans.Runtime;
 using OrleansMatchingServer;
 
 public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
 {
-    //테스트용 매칭 대기시간
-    private static readonly TimeSpan MatchInterval = TimeSpan.FromMinutes(1);
+    //테스트용 매칭 대기시간. 부하 테스트에서는 MatchIntervalSeconds로 줄여서 측정합니다.
+    private static readonly TimeSpan DefaultMatchInterval = TimeSpan.FromMinutes(1);
+
+    private readonly TimeSpan _matchInterval;
 
     private readonly MatchHistoryRepository _historyRepository;
     private readonly QueueCacheRepository _queueCacheRepository;
@@ -18,29 +22,43 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
 
     private IDisposable? _timer;
 
+    private readonly ILocalSiloDetails _localSiloDetails;
+
     public MatchingQueueGrain(
         MatchHistoryRepository historyRepository,
         QueueCacheRepository queueCacheRepository,
         SessionRepository sessionRepository,
-        ILogger<MatchingQueueGrain> logger)
+        ILogger<MatchingQueueGrain> logger,
+        ILocalSiloDetails localSiloDetails,
+        IConfiguration configuration)
     {
         _historyRepository = historyRepository;
         _queueCacheRepository = queueCacheRepository;
         _sessionRepository = sessionRepository;
         _logger = logger;
+        _localSiloDetails = localSiloDetails;
+
+        var intervalSeconds = configuration.GetValue("MatchIntervalSeconds", 0);
+        _matchInterval = intervalSeconds > 0
+            ? TimeSpan.FromSeconds(intervalSeconds)
+            : DefaultMatchInterval;
     }
 
     //Unity의 Awake같은 개념
     public override Task OnActivateAsync(CancellationToken cancellationToken)
     {
+        _logger.LogInformation(
+            "Silo 체크 Silo={Silo}",
+            _localSiloDetails.SiloAddress);
+
         // 주기 실행 타이머 등록
         _timer = this.RegisterGrainTimer(
             callback: (state, ct) => RunMatching(),
             state: 0,
             options: new GrainTimerCreationOptions
             {
-                DueTime = MatchInterval,
-                Period = MatchInterval,
+                DueTime = _matchInterval,
+                Period = _matchInterval,
                 Interleave = false,
                 KeepAlive = true
             });
