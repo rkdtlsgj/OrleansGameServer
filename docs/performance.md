@@ -14,10 +14,8 @@
 타이머를 통해 2명씩 매칭되고, 남은 유저는 계속 대기하는 형태로 동작합니다.
 
 <img width="588" height="298" alt="매칭 이력 저장" src="https://github.com/user-attachments/assets/3a887b01-31d8-45a4-b5a9-92e5491752bf" /><br>
-<img width="715" height="151" alt="Redis 대기 유저" src="https://github.com/user-attachments/assets/294db437-db34-410c-80c2-7be9eed879ab" /><br>
 
 * PostgreSQL `match_history`에 매칭 완료 이력 저장 확인
-* Redis에서 채널별 대기 유저 목록 확인
 
 ## 🎰 가챠 테스트
 

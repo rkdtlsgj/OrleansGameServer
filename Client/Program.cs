@@ -145,7 +145,7 @@ async Task RunGachaMenu(IClusterClient clusterClient, string sessionId, string u
 
         Console.WriteLine("\n=== 가챠 ===");
         Console.WriteLine($"유료젬: {wallet.PaidGem}  무료젬: {wallet.FreeGem}");
-        Console.WriteLine($"포인트: {pity.PityPoint}");
+        Console.WriteLine($"포인트: {pity}");
         Console.WriteLine("1. 1연챠 (160젬)");
         Console.WriteLine("2. 10연챠 (1600젬)");
         Console.WriteLine("3. 가챠 이력 확인");

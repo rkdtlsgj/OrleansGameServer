@@ -2,12 +2,6 @@
 namespace Common
 {
     [GenerateSerializer]
-    public class GachaState
-    {
-        [Id(0)] public int PityPoint { get; set; } // 포인트 체크
-    }
-
-    [GenerateSerializer]
     public class PlayerWallet
     {
         [Id(0)] public int PaidGem { get; set; } // 유료 재화

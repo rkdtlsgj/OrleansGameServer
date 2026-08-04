@@ -81,15 +81,12 @@ namespace OrleansMatchingServer
             };
         }
 
-        public async Task<GachaState> GetPityInfoAsync(string sessionId)
+        public async Task<int> GetPityInfoAsync(string sessionId)
         {
             var userId = this.GetPrimaryKeyString();
             await _sessionRepository.EnsureUserSessionAsync(sessionId, userId);
 
-            return new GachaState
-            {
-                PityPoint = await GetPityPointAsync(userId)
-            };
+            return await GetPityPointAsync(userId);
         }
 
         public async Task<IReadOnlyList<GachaHistoryItem>> GetHistoryAsync(string sessionId, int limit)

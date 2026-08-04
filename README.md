@@ -36,14 +36,13 @@ Client (콘솔 · Orleans Client)
 Orleans Silo ───────────────────────────┘
   ├─ LoginGrain           인증  Redis 세션 발급 (24h TTL)
   ├─ MatchingQueueGrain   채널별 대기열  GrainTimer 주기 매칭
-  │      └─> MatchGrain   매치 인스턴스 생성  초기화
   ├─ WalletGrain          유료/무료 젬 분리 정산
   └─ GachaGrain           확률 추첨  90연차 천장  차감+저장 단일 트랜잭션
          │
     ┌────┴─────┐
     ▼          ▼
 PostgreSQL    Redis
-DB (COPY  batch upsert)    세션  매칭 대기열 캐시
+DB (COPY  batch upsert)    세션
 ```
 
 ### 기술 스택
@@ -71,7 +70,7 @@ DB (COPY  batch upsert)    세션  매칭 대기열 캐시
 |------|-----------|
 | Grain 인터페이스 | [Common/Grain/](Common/Grain/) |
 | 로그인 / 세션 | [LoginGrain.cs](OrleansMatchingServer/Grain/LoginGrain.cs) · [SessionRepository.cs](OrleansMatchingServer/SessionRepository.cs) |
-| 매칭 대기열 / 타이머 | [MatchingQueueGrain.cs](OrleansMatchingServer/Grain/MatchingQueueGrain.cs) · [QueueCacheRepository.cs](OrleansMatchingServer/QueueCacheRepository.cs) |
+| 매칭 대기열 / 타이머 | [MatchingQueueGrain.cs](OrleansMatchingServer/Grain/MatchingQueueGrain.cs) |
 | 가챠 / 단일 트랜잭션 | [GachaGrain.cs](OrleansMatchingServer/Grain/GachaGrain.cs) · [GachaHistoryRepository.cs](OrleansMatchingServer/GachaHistoryRepository.cs) |
 | 지갑 | [WalletGrain.cs](OrleansMatchingServer/Grain/WalletGrain.cs) · [WalletRepository.cs](OrleansMatchingServer/WalletRepository.cs) |
 | 클라이언트 / Observer | [Client/Program.cs](Client/Program.cs) · [ConsoleMatchObserver.cs](Client/ConsoleMatchObserver.cs) |
@@ -122,7 +121,7 @@ await tx.CommitAsync();
 | **유료/무료 재화 분리** | 무료젬 우선 차감, 부족분만 유료젬에서 차감 | 결제 재화 정산 정확성  환불 정책 대응 |
 | **COPY (binary import)** | 가챠 이력 N건을 단일 스트림으로 기록 | 10연차 등 대량 기록 시 DB 왕복 절감 |
 | **Batch Upsert** | 보유 캐릭터 N건을 `unnest` 배열 바인딩 + `on conflict`로 단일 쿼리 처리 | 중복 획득 시 count 집계 유지 |
-| **캐시 전략** | 천장 포인트는 Grain 필드에 캐싱(턴 실행으로 안전), 세션·대기열은 Redis | 뽑기마다 반복되던 DB 조회 제거 |
+| **캐시 전략** | 천장 포인트는 Grain 필드에 캐싱(턴 실행으로 안전), 세션은 Redis | 뽑기마다 반복되던 DB 조회 제거 |
 
 ### 부하 테스트 — 병목을 단계별로 제거
 
@@ -168,7 +167,7 @@ PostgreSQL 커넥션 한도(`max_connections=100`)에 Npgsql 기본 풀(프로�
 
 | 항&#8288;목 | 검증 내용 | 결과 |
 |------|----------|------|
-| **매칭** | GrainTimer로 2명씩 매칭, 홀수 인원은 대기열에 유지 | Observer 결과 통지, SQL `match_history` 저장, Redis 채널별 대기열 확인 |
+| **매칭** | GrainTimer로 2명씩 매칭, 홀수 인원은 대기열에 유지 | Observer 결과 통지, SQL `match_history` 저장 |
 | **가챠** | 1회·10회 뽑기, 90연차 천장, 뽑기 이력 저장 | 각 시나리오 정상 동작과 DB 이력 저장 확인 |
 | **확률** | 200명이 각각 10연차를 100회 요청 | 천장 보정에 따른 소폭 차이를 제외하고 실제 획득 비율이 설정 확률과 거의 일치 |
 

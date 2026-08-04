@@ -21,7 +21,6 @@ await Host.CreateDefaultBuilder(args)
             siloPort: siloPort,
             gatewayPort: gatewayPort,
             primarySiloEndpoint: new IPEndPoint(IPAddress.Loopback, primaryPort))
-        .AddMemoryGrainStorage("matchStore")
         .Configure<Orleans.Configuration.ActivationCountBasedPlacementOptions>(options =>
             options.ChooseOutOf = 2)
         .Configure<Orleans.Configuration.ClusterOptions>(options =>
@@ -51,7 +50,6 @@ await Host.CreateDefaultBuilder(args)
         services.AddSingleton(_ => new UserRepository(postgres));
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redis));
 
-        services.AddSingleton<QueueCacheRepository>();
         services.AddSingleton<SessionRepository>();
 
     })

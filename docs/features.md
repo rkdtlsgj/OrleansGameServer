@@ -14,12 +14,11 @@
 
 ## ⚔️ 매칭
 
-> Grain key: **채널 이름** — [MatchingQueueGrain.cs](../OrleansMatchingServer/Grain/MatchingQueueGrain.cs) · [MatchingGrain.cs](../OrleansMatchingServer/Grain/MatchingGrain.cs)
+> Grain key: **채널 이름** — [MatchingQueueGrain.cs](../OrleansMatchingServer/Grain/MatchingQueueGrain.cs)
 
 * 현재 클라이언트는 `dice` 채널에 입장합니다.
 * 같은 채널에서 대기 중인 유저를 타이머로 주기적으로 **2명씩 매칭**합니다.
 * 매칭 성공 시 양쪽 클라이언트에 **Observer**로 결과를 알립니다.
-* Redis에 채널별 대기 유저 목록과 유저별 현재 채널을 캐싱합니다.
 * PostgreSQL `match_history`에 매칭 완료 기록을 저장합니다.
 
 ## 💰 지갑

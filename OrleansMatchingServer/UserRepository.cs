@@ -70,8 +70,4 @@ public class UserRepository
     }
 }
 
-public sealed class UserData
-{
-    public string UserId { get; set; } = "";
-    public string PasswordHash { get; set; } = "";
-}
+public sealed record UserData(string UserId, string PasswordHash);

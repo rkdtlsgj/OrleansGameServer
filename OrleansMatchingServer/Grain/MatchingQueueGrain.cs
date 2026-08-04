@@ -13,7 +13,6 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
     private readonly TimeSpan _matchInterval;
 
     private readonly MatchHistoryRepository _historyRepository;
-    private readonly QueueCacheRepository _queueCacheRepository;
     private readonly SessionRepository _sessionRepository;
     private readonly ILogger<MatchingQueueGrain> _logger;
 
@@ -26,14 +25,12 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
 
     public MatchingQueueGrain(
         MatchHistoryRepository historyRepository,
-        QueueCacheRepository queueCacheRepository,
         SessionRepository sessionRepository,
         ILogger<MatchingQueueGrain> logger,
         ILocalSiloDetails localSiloDetails,
         IConfiguration configuration)
     {
         _historyRepository = historyRepository;
-        _queueCacheRepository = queueCacheRepository;
         _sessionRepository = sessionRepository;
         _logger = logger;
         _localSiloDetails = localSiloDetails;
@@ -84,7 +81,7 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
         {
             //갱신만 하도록 수정
             _waiting[nickname] = observer;
-            Queued(observer);
+            observer.Queued(key, _waiting.Count);
 
             _logger.LogInformation(
                 "대기열 등록. Channel={Channel}, UserId={UserId}, WaitingCount={WaitingCount}",
@@ -97,8 +94,6 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
 
         _waiting[nickname] = observer;
         _order.Enqueue(nickname);
-
-        await _queueCacheRepository.AddToQueueAsync(key, nickname);
 
         _logger.LogInformation(
             "대기열 참가. Channel={Channel}, UserId={UserId}, WaitingCount={WaitingCount}",
@@ -117,8 +112,6 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
 
         if (_waiting.Remove(nickname))
         {
-            await _queueCacheRepository.RemoveFromQueueAsync(key, nickname);
-
             _logger.LogInformation(
                 "매칭 취소. Channel={Channel}, UserId={UserId}, WaitingCount={WaitingCount}",
                 key,
@@ -192,14 +185,8 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
             _waiting.Remove(p1);
             _waiting.Remove(p2);
 
-            await _queueCacheRepository.RemoveFromQueueAsync(key, p1);
-            await _queueCacheRepository.RemoveFromQueueAsync(key, p2);
-
             var matchId = Guid.NewGuid();
-            var match = GrainFactory.GetGrain<IMatchGrain>(matchId);
             var createdAt = DateTimeOffset.UtcNow;
-
-            await match.Initialize(key, p1, p2);
 
             //매칭 기록
             await _historyRepository.SaveMatchAsync(matchId, key, p1, p2, createdAt);
@@ -211,8 +198,8 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
                 p1,
                 p2);
 
-            NotiMatchComplete(obs1, matchId, key, p2);
-            NotiMatchComplete(obs2, matchId, key, p1);
+            obs1.Matched(matchId, key, p2);
+            obs2.Matched(matchId, key, p1);
         }
 
         _logger.LogInformation(
@@ -223,13 +210,4 @@ public class MatchingQueueGrain : Grain, IMatchmakingQueueGrain
         BroadcastQueued();
     }
 
-    private void Queued(IMatchObserver obs)
-    {
-        obs.Queued(this.GetPrimaryKeyString(), _waiting.Count);
-    }
-
-    private static void NotiMatchComplete(IMatchObserver obs, Guid matchId, string key, string opponent)
-    {
-        obs.Matched(matchId, key, opponent);
-    }
 }

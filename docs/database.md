@@ -1,7 +1,7 @@
 # 데이터베이스 구조
 
 * **PostgreSQL** — 계정, 매칭 이력, 재화, 가챠 기록 (영속 데이터)
-* **Redis** — 세션, 매칭 대기열 (캐시 / 만료 데이터)
+* **Redis** — 세션 (만료 데이터)
 
 [← README로 돌아가기](../README.md)
 
@@ -100,5 +100,3 @@ erDiagram
 | 키 | 타입 | 용도 |
 |---|---|---|
 | `session:{sessionId}` | string | 세션 → 유저 ID 매핑, 24시간 만료 |
-| `channel:{channel}:members` | set | 채널별 매칭 대기 유저 목록 |
-| `user:{nickname}:channel` | string | 유저가 현재 대기 중인 채널 |
